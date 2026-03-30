@@ -25,6 +25,7 @@ class FeedController {
         $likesCountByPost = [];
         $likedPostIds = [];
         $commentsByPost = [];
+        $suggestedUsers = [];
         try {
             $pdo = $this->getPdo();
             $this->ensurePostsImageColumn($pdo);
@@ -62,7 +63,7 @@ class FeedController {
                 }
 
                 $commentsStmt = $pdo->prepare(
-                    "SELECT c.post_id, c.content, c.created_at, u.username, u.prenom, u.nom
+                    "SELECT c.id, c.post_id, c.user_id, c.content, c.created_at, u.username, u.prenom, u.nom
                      FROM comments c
                      INNER JOIN users u ON u.id = c.user_id
                      WHERE c.post_id IN ($placeholders)
@@ -78,8 +79,19 @@ class FeedController {
                     $commentsByPost[$postId][] = $commentRow;
                 }
             }
+
+            $suggestedStmt = $pdo->prepare(
+                'SELECT id, username, prenom, nom
+                 FROM users
+                 WHERE id <> :current_user_id
+                 ORDER BY id DESC
+                 LIMIT 3'
+            );
+            $suggestedStmt->execute(['current_user_id' => (int) $_SESSION['user_id']]);
+            $suggestedUsers = $suggestedStmt->fetchAll() ?: [];
         } catch (\PDOException $exception) {
             $posts = [];
+            $suggestedUsers = [];
             if ($publishError === null) {
                 $publishError = 'Le fil est indisponible pour le moment.';
             }

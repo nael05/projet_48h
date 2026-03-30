@@ -1,3 +1,37 @@
+  <style>
+    .feed-post-card {
+      min-height: 470px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .feed-post-text {
+      display: -webkit-box;
+      -webkit-line-clamp: 4;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      min-height: 86px;
+    }
+
+    .feed-post-media {
+      margin-top: 12px;
+      height: 220px;
+      border-radius: 8px;
+      border: 1px solid #e5e7eb;
+      background: #f3f4f6;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .feed-post-media img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  </style>
+
   <div style="flex:1; padding:24px;">
     <main style="max-width:1200px;margin:0 auto;padding:28px;background:var(--container-gradient);backdrop-filter:blur(10px);border-radius:16px;box-shadow:0 12px 40px rgba(0,0,0,0.15);display:grid;grid-template-columns:1fr 360px;gap:24px;">
 
@@ -45,6 +79,7 @@
           <p style="font-size:14px;color:#4b5563;">Aucune publication pour le moment. Sois le premier a publier.</p>
         </div>
         <?php else: ?>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:12px;align-items:start;">
         <?php foreach ($posts as $post): ?>
         <?php
           $postId = (int) ($post['id'] ?? 0);
@@ -65,7 +100,7 @@
           $isLiked = !empty($likedPostIds[$postId]);
           $postComments = $commentsByPost[$postId] ?? [];
         ?>
-        <div class="card" style="padding:20px;">
+        <div class="card feed-post-card" style="padding:14px;">
           <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px;">
             <div style="display:flex;align-items:center;gap:12px;">
               <a href="<?= htmlspecialchars(($basePath ?? '') . '/user?id=' . $postUserId, ENT_QUOTES, 'UTF-8') ?>" style="display:block;width:42px;height:42px;border-radius:50%;background:#d1d5db;flex-shrink:0;"></a>
@@ -79,19 +114,20 @@
             <span style="font-size:11.5px;color:#9ca3af;font-weight:500;"><?= htmlspecialchars($publishedAt, ENT_QUOTES, 'UTF-8') ?></span>
           </div>
 
-          <div style="font-size:14px;line-height:1.55;color:#374151;white-space:normal;word-break:break-word;">
+          <div class="feed-post-text" style="font-size:14px;line-height:1.55;color:#374151;white-space:normal;word-break:break-word;">
             <?= nl2br(htmlspecialchars((string) ($post['content'] ?? ''), ENT_QUOTES, 'UTF-8')) ?>
           </div>
 
-          <?php if (!empty($post['image_path'])): ?>
-          <div style="margin-top:12px;">
+          <div class="feed-post-media">
+            <?php if (!empty($post['image_path'])): ?>
             <img
               src="<?= htmlspecialchars(($basePath ?? '') . (string) $post['image_path'], ENT_QUOTES, 'UTF-8') ?>"
               alt="Image du post"
-              style="max-width:100%;max-height:340px;border-radius:8px;border:1px solid #e5e7eb;object-fit:cover;"
             >
+            <?php else: ?>
+            <span style="font-size:12px;color:#9ca3af;font-family:'Montserrat',sans-serif;">Aucune image</span>
+            <?php endif; ?>
           </div>
-          <?php endif; ?>
 
           <div style="display:flex;gap:8px;align-items:center;padding-top:12px;margin-top:12px;border-top:1px solid #f3f4f6;">
             <form action="<?= htmlspecialchars(($basePath ?? '') . '/posts/like', ENT_QUOTES, 'UTF-8') ?>" method="POST" style="margin:0;">
@@ -101,7 +137,18 @@
                 <span><?= $likeCount ?> Like<?= $likeCount > 1 ? 's' : '' ?></span>
               </button>
             </form>
-            <span style="font-size:12px;color:#6b7280;"><?= count($postComments) ?> commentaire<?= count($postComments) > 1 ? 's' : '' ?></span>
+            <button
+              class="btn-secondary"
+              type="button"
+              style="display:flex;align-items:center;gap:8px;"
+              onclick="(function(){var box=document.getElementById('comments-box-<?= $postId ?>'); if(!box){return;} box.style.display = (box.style.display === 'none') ? 'block' : 'none';})();"
+              aria-expanded="false"
+            >
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+              </svg>
+              <span><?= count($postComments) ?> commentaire<?= count($postComments) > 1 ? 's' : '' ?></span>
+            </button>
             <?php if ($isOwnPost): ?>
             <form action="<?= htmlspecialchars(($basePath ?? '') . '/posts/delete', ENT_QUOTES, 'UTF-8') ?>" method="POST" style="margin:0 0 0 auto;" onsubmit="return confirm('Supprimer ce post ?');">
               <input type="hidden" name="post_id" value="<?= $postId ?>">
@@ -118,35 +165,56 @@
             <?php endif; ?>
           </div>
 
-          <div style="margin-top:12px;display:flex;flex-direction:column;gap:8px;">
+          <div id="comments-box-<?= $postId ?>" style="margin-top:12px;display:none;">
+            <div style="display:flex;flex-direction:column;gap:8px;">
             <?php foreach ($postComments as $comment): ?>
             <?php
+              $commentId = (int) ($comment['id'] ?? 0);
+              $isOwnComment = ((int) ($comment['user_id'] ?? 0) === (int) ($_SESSION['user_id'] ?? 0));
               $commentAuthor = trim(((string) ($comment['prenom'] ?? '')) . ' ' . ((string) ($comment['nom'] ?? '')));
               if ($commentAuthor === '') {
                   $commentAuthor = (string) ($comment['username'] ?? 'Utilisateur');
               }
             ?>
             <div style="background:#f9fafb;border:1px solid #e5e7eb;border-radius:8px;padding:8px 10px;">
-              <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:3px;"><?= htmlspecialchars($commentAuthor, ENT_QUOTES, 'UTF-8') ?></div>
+              <div style="display:flex;align-items:center;gap:8px;">
+                <div style="font-size:12px;font-weight:700;color:#111827;flex:1;"><?= htmlspecialchars($commentAuthor, ENT_QUOTES, 'UTF-8') ?></div>
+                <?php if ($isOwnComment): ?>
+                <form action="<?= htmlspecialchars(($basePath ?? '') . '/posts/comment/delete', ENT_QUOTES, 'UTF-8') ?>" method="POST" style="margin:0;" onsubmit="return confirm('Supprimer ce commentaire ?');">
+                  <input type="hidden" name="comment_id" value="<?= $commentId ?>">
+                  <button type="submit" class="btn-outline" title="Supprimer le commentaire" aria-label="Supprimer le commentaire" style="border-color:#fecaca;color:#b91c1c;background:#fff5f5;padding:4px 8px;line-height:1;">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                      <path d="M3 6h18"></path>
+                      <path d="M8 6V4h8v2"></path>
+                      <path d="M19 6l-1 14H6L5 6"></path>
+                      <path d="M10 11v6"></path>
+                      <path d="M14 11v6"></path>
+                    </svg>
+                  </button>
+                </form>
+                <?php endif; ?>
+              </div>
               <div style="font-size:13px;color:#374151;line-height:1.45;"><?= nl2br(htmlspecialchars((string) ($comment['content'] ?? ''), ENT_QUOTES, 'UTF-8')) ?></div>
             </div>
             <?php endforeach; ?>
-          </div>
+            </div>
 
-          <form action="<?= htmlspecialchars(($basePath ?? '') . '/posts/comment', ENT_QUOTES, 'UTF-8') ?>" method="POST" style="margin-top:10px;display:flex;gap:8px;">
-            <input type="hidden" name="post_id" value="<?= $postId ?>">
-            <input
-              type="text"
-              name="comment_content"
-              placeholder="Ajouter un commentaire"
-              maxlength="1000"
-              required
-              style="flex:1;background:#f9fafb;border:1.5px solid #e5e7eb;border-radius:6px;padding:10px 12px;font-family:'Roboto',sans-serif;font-size:13px;color:#374151;outline:none;"
-            >
-            <button class="btn-dark" type="submit">Commenter</button>
-          </form>
+            <form action="<?= htmlspecialchars(($basePath ?? '') . '/posts/comment', ENT_QUOTES, 'UTF-8') ?>" method="POST" style="margin-top:10px;display:flex;gap:8px;">
+              <input type="hidden" name="post_id" value="<?= $postId ?>">
+              <input
+                type="text"
+                name="comment_content"
+                placeholder="Ajouter un commentaire"
+                maxlength="1000"
+                required
+                style="flex:1;background:#f9fafb;border:1.5px solid #e5e7eb;border-radius:6px;padding:10px 12px;font-family:'Roboto',sans-serif;font-size:13px;color:#374151;outline:none;"
+              >
+              <button class="btn-dark" type="submit">Commenter</button>
+            </form>
+          </div>
         </div>
         <?php endforeach; ?>
+        </div>
         <?php endif; ?>
 
         <!-- Charger plus -->
@@ -197,15 +265,26 @@
         <div>
           <div class="section-header"><h3>Suggérés</h3><span class="sep"></span></div>
           <div class="card" style="overflow:hidden;">
-            <?php foreach ([[90,70],[75,55],[85,65]] as $i => $w): ?>
+            <?php if (empty($suggestedUsers)): ?>
+            <div style="padding:12px 16px;font-size:12px;color:#6b7280;">Aucun compte suggéré pour le moment.</div>
+            <?php else: ?>
+            <?php foreach ($suggestedUsers as $i => $suggestedUser): ?>
+            <?php
+              $suggestedUserId = (int) ($suggestedUser['id'] ?? 0);
+              $suggestedDisplayName = trim(((string) ($suggestedUser['prenom'] ?? '')) . ' ' . ((string) ($suggestedUser['nom'] ?? '')));
+              if ($suggestedDisplayName === '') {
+                  $suggestedDisplayName = (string) ($suggestedUser['username'] ?? 'Utilisateur');
+              }
+            ?>
             <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 16px;<?= $i>0 ? 'border-top:1px solid #f3f4f6':'' ?>">
-              <div style="display:flex;align-items:center;gap:10px;">
+              <a href="<?= htmlspecialchars(($basePath ?? '') . '/user?id=' . $suggestedUserId, ENT_QUOTES, 'UTF-8') ?>" style="display:flex;align-items:center;gap:10px;color:inherit;text-decoration:none;min-width:0;">
                 <div style="width:36px;height:36px;border-radius:50%;background:#d1d5db;flex-shrink:0;"></div>
-                <div class="skel" style="width:<?= $w[0] ?>px;height:10px;"></div>
-              </div>
-              <button class="btn-outline" style="font-size:12px;padding:5px 12px;">+ Suivre</button>
+                <div style="font-size:12px;color:#374151;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:150px;"><?= htmlspecialchars($suggestedDisplayName, ENT_QUOTES, 'UTF-8') ?></div>
+              </a>
+              <a href="<?= htmlspecialchars(($basePath ?? '') . '/messages?with=' . $suggestedUserId, ENT_QUOTES, 'UTF-8') ?>" class="btn-outline" style="font-size:12px;padding:5px 12px;">Message</a>
             </div>
             <?php endforeach; ?>
+            <?php endif; ?>
           </div>
         </div>
 

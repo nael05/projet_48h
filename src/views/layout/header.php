@@ -3,6 +3,8 @@ $activeNav = $activeNav ?? 'feed';
 $mockUrl = $mockUrl ?? 'localhost:3000/';
 $basePath = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/')), '/');
 $basePath = ($basePath === '/' || $basePath === '.') ? '' : $basePath;
+$sessionProfilePicture = trim((string) ($_SESSION['profile_picture'] ?? ''));
+$headerAvatarUrl = $sessionProfilePicture !== '' ? $basePath . $sessionProfilePicture : '';
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -185,7 +187,13 @@ $basePath = ($basePath === '/' || $basePath === '.') ? '' : $basePath;
       <span class="header__bell__dot"></span>
     </div>
 
-    <div class="header__avatar"></div>
+    <a
+      href="<?= htmlspecialchars($basePath . '/profile', ENT_QUOTES, 'UTF-8') ?>"
+      class="header__avatar"
+      title="Mon profil"
+      aria-label="Mon profil"
+      style="<?= $headerAvatarUrl !== '' ? 'background-image:url(' . htmlspecialchars($headerAvatarUrl, ENT_QUOTES, 'UTF-8') . ');background-size:cover;background-position:center;' : '' ?>"
+    ></a>
   </header>
 
   <div class="app">

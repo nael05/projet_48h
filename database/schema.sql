@@ -20,6 +20,7 @@ CREATE TABLE users (
   prenom VARCHAR(50) NOT NULL,
   formation VARCHAR(100),
   profile_picture VARCHAR(255),
+  banner_picture VARCHAR(255),
   email VARCHAR(100) NOT NULL UNIQUE,
   password TEXT NOT NULL,
   bio TEXT,

@@ -21,6 +21,90 @@ class ProfileController {
         $this->renderProfileByUserId($userId);
     }
 
+    public function update(): void {
+        $this->requireAuth();
+
+        $basePath = $this->getBasePath();
+        if (($_SERVER['REQUEST_METHOD'] ?? 'GET') !== 'POST') {
+            header('Location: ' . $basePath . '/profile');
+            exit;
+        }
+
+        $currentUserId = (int) $_SESSION['user_id'];
+        $bio = trim((string) ($_POST['bio'] ?? ''));
+        if (strlen($bio) > 1000) {
+            $_SESSION['profile_update_error'] = 'La biographie est trop longue (1000 caracteres max).';
+            header('Location: ' . $basePath . '/profile');
+            exit;
+        }
+
+        try {
+            $pdo = $this->getPdo();
+            $this->ensureUsersBannerColumn($pdo);
+
+            $stmt = $pdo->prepare('SELECT profile_picture, banner_picture FROM users WHERE id = :id LIMIT 1');
+            $stmt->execute(['id' => $currentUserId]);
+            $user = $stmt->fetch();
+            if (!$user) {
+                $_SESSION['profile_update_error'] = 'Compte introuvable.';
+                header('Location: ' . $basePath . '/profile');
+                exit;
+            }
+
+            $profilePicture = (string) ($user['profile_picture'] ?? '');
+            $bannerPicture = (string) ($user['banner_picture'] ?? '');
+
+            if (!empty($_FILES['profile_picture']) && is_array($_FILES['profile_picture'])) {
+                $uploadedProfile = $this->storeImageUpload($_FILES['profile_picture'], 'profiles');
+                if ($uploadedProfile === null && (int) ($_FILES['profile_picture']['error'] ?? UPLOAD_ERR_NO_FILE) !== UPLOAD_ERR_NO_FILE) {
+                    $_SESSION['profile_update_error'] = 'Photo de profil invalide (jpg, png, gif, webp, 5MB max).';
+                    header('Location: ' . $basePath . '/profile');
+                    exit;
+                }
+
+                if ($uploadedProfile !== null) {
+                    $this->removeUploadedFile($profilePicture, '/uploads/profiles/');
+                    $profilePicture = $uploadedProfile;
+                }
+            }
+
+            if (!empty($_FILES['banner_picture']) && is_array($_FILES['banner_picture'])) {
+                $uploadedBanner = $this->storeImageUpload($_FILES['banner_picture'], 'banners');
+                if ($uploadedBanner === null && (int) ($_FILES['banner_picture']['error'] ?? UPLOAD_ERR_NO_FILE) !== UPLOAD_ERR_NO_FILE) {
+                    $_SESSION['profile_update_error'] = 'Banniere invalide (jpg, png, gif, webp, 5MB max).';
+                    header('Location: ' . $basePath . '/profile');
+                    exit;
+                }
+
+                if ($uploadedBanner !== null) {
+                    $this->removeUploadedFile($bannerPicture, '/uploads/banners/');
+                    $bannerPicture = $uploadedBanner;
+                }
+            }
+
+            $updateStmt = $pdo->prepare(
+                'UPDATE users
+                 SET bio = :bio,
+                     profile_picture = :profile_picture,
+                     banner_picture = :banner_picture
+                 WHERE id = :id'
+            );
+            $updateStmt->execute([
+                'bio' => $bio !== '' ? $bio : null,
+                'profile_picture' => $profilePicture !== '' ? $profilePicture : null,
+                'banner_picture' => $bannerPicture !== '' ? $bannerPicture : null,
+                'id' => $currentUserId,
+            ]);
+
+            $_SESSION['profile_picture'] = $profilePicture;
+        } catch (\PDOException $exception) {
+            $_SESSION['profile_update_error'] = 'Mise a jour du profil impossible pour le moment.';
+        }
+
+        header('Location: ' . $basePath . '/profile');
+        exit;
+    }
+
     private function renderProfileByUserId(int $userId): void {
         $basePath = $this->getBasePath();
 
@@ -30,6 +114,12 @@ class ProfileController {
 
         $profileFullName = (string) ($_SESSION['username'] ?? 'Utilisateur');
         $profileFormation = 'Profil Ynov';
+        $profileBio = '';
+        $profilePicture = '';
+        $profileBanner = '';
+        $isOwnProfile = ($userId === (int) ($_SESSION['user_id'] ?? 0));
+        $profileUpdateError = $_SESSION['profile_update_error'] ?? null;
+        unset($_SESSION['profile_update_error']);
         $profilePosts = [];
         $profileStats = [
             'posts' => 0,
@@ -40,8 +130,9 @@ class ProfileController {
         try {
             $pdo = $this->getPdo();
             $this->ensurePostsImageColumn($pdo);
+            $this->ensureUsersBannerColumn($pdo);
 
-            $stmt = $pdo->prepare('SELECT nom, prenom, formation FROM users WHERE id = :id LIMIT 1');
+            $stmt = $pdo->prepare('SELECT nom, prenom, formation, bio, profile_picture, banner_picture FROM users WHERE id = :id LIMIT 1');
             $stmt->execute(['id' => $userId]);
             $user = $stmt->fetch();
 
@@ -63,6 +154,10 @@ class ProfileController {
             if ($formation !== '') {
                 $profileFormation = $formation;
             }
+
+            $profileBio = trim((string) ($user['bio'] ?? ''));
+            $profilePicture = (string) ($user['profile_picture'] ?? '');
+            $profileBanner = (string) ($user['banner_picture'] ?? '');
 
             $postsStmt = $pdo->prepare(
                 'SELECT p.id, p.content, p.image_path, p.created_at,
@@ -141,6 +236,74 @@ class ProfileController {
 
         if (!$exists) {
             $pdo->exec('ALTER TABLE posts ADD COLUMN image_path VARCHAR(255) NULL AFTER content');
+        }
+    }
+
+    private function ensureUsersBannerColumn(\PDO $pdo): void {
+        $stmt = $pdo->query("SHOW COLUMNS FROM users LIKE 'banner_picture'");
+        $exists = $stmt->fetch();
+
+        if (!$exists) {
+            $pdo->exec('ALTER TABLE users ADD COLUMN banner_picture VARCHAR(255) NULL AFTER profile_picture');
+        }
+    }
+
+    private function storeImageUpload(array $file, string $subFolder): ?string {
+        $uploadError = (int) ($file['error'] ?? UPLOAD_ERR_NO_FILE);
+        if ($uploadError !== UPLOAD_ERR_OK) {
+            return null;
+        }
+
+        $tmpName = (string) ($file['tmp_name'] ?? '');
+        if ($tmpName === '' || !is_uploaded_file($tmpName)) {
+            return null;
+        }
+
+        $size = (int) ($file['size'] ?? 0);
+        if ($size <= 0 || $size > 5 * 1024 * 1024) {
+            return null;
+        }
+
+        $finfo = finfo_open(FILEINFO_MIME_TYPE);
+        $mimeType = $finfo ? finfo_file($finfo, $tmpName) : '';
+        if ($finfo) {
+            finfo_close($finfo);
+        }
+
+        $allowed = [
+            'image/jpeg' => 'jpg',
+            'image/png' => 'png',
+            'image/gif' => 'gif',
+            'image/webp' => 'webp',
+        ];
+
+        if (!isset($allowed[$mimeType])) {
+            return null;
+        }
+
+        $uploadDir = __DIR__ . '/../../public/uploads/' . $subFolder;
+        if (!is_dir($uploadDir) && !mkdir($uploadDir, 0775, true) && !is_dir($uploadDir)) {
+            return null;
+        }
+
+        $filename = $subFolder . '_' . bin2hex(random_bytes(10)) . '.' . $allowed[$mimeType];
+        $targetPath = $uploadDir . DIRECTORY_SEPARATOR . $filename;
+
+        if (!move_uploaded_file($tmpName, $targetPath)) {
+            return null;
+        }
+
+        return '/uploads/' . $subFolder . '/' . $filename;
+    }
+
+    private function removeUploadedFile(string $relativePath, string $expectedPrefix): void {
+        if ($relativePath === '' || !str_starts_with($relativePath, $expectedPrefix)) {
+            return;
+        }
+
+        $absolutePath = __DIR__ . '/../../public' . str_replace('/', DIRECTORY_SEPARATOR, $relativePath);
+        if (is_file($absolutePath)) {
+            @unlink($absolutePath);
         }
     }
 }

@@ -33,7 +33,7 @@ class AuthController {
 
             try {
                 $pdo = $this->getPdo();
-                $stmt = $pdo->prepare('SELECT id, username, email, password FROM users WHERE email = :email LIMIT 1');
+                $stmt = $pdo->prepare('SELECT id, username, email, password, profile_picture FROM users WHERE email = :email LIMIT 1');
                 $stmt->execute(['email' => $email]);
                 $user = $stmt->fetch();
 
@@ -51,6 +51,7 @@ class AuthController {
                 $_SESSION['user_id'] = (int) $user['id'];
                 $_SESSION['username'] = (string) $user['username'];
                 $_SESSION['email'] = (string) $user['email'];
+                $_SESSION['profile_picture'] = (string) ($user['profile_picture'] ?? '');
                 session_regenerate_id(true);
 
                 header('Location: ' . $this->buildUrl(self::FEED_PATH));
@@ -128,7 +129,7 @@ class AuthController {
                     'password' => $passwordHash,
                 ]);
 
-                $freshUserStmt = $pdo->prepare('SELECT id, username, email FROM users WHERE email = :email LIMIT 1');
+                $freshUserStmt = $pdo->prepare('SELECT id, username, email, profile_picture FROM users WHERE email = :email LIMIT 1');
                 $freshUserStmt->execute(['email' => $email]);
                 $freshUser = $freshUserStmt->fetch();
 
@@ -141,6 +142,7 @@ class AuthController {
                 $_SESSION['user_id'] = (int) $freshUser['id'];
                 $_SESSION['username'] = (string) $freshUser['username'];
                 $_SESSION['email'] = (string) $freshUser['email'];
+                $_SESSION['profile_picture'] = (string) ($freshUser['profile_picture'] ?? '');
                 session_regenerate_id(true);
                 session_write_close();
 
@@ -161,6 +163,7 @@ class AuthController {
         $_SESSION['user_id'] = null;
         $_SESSION['username'] = null;
         $_SESSION['email'] = null;
+        $_SESSION['profile_picture'] = null;
         
         // Détruire la session complètement
         session_destroy();

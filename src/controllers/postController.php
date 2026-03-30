@@ -156,6 +156,50 @@ class PostController {
 		exit;
 	}
 
+	public function deleteComment(): void {
+		$basePath = $this->getBasePath();
+
+		if (!$this->isAuthenticated()) {
+			header('Location: ' . $basePath . '/login');
+			exit;
+		}
+
+		if (($_SERVER['REQUEST_METHOD'] ?? 'GET') !== 'POST') {
+			header('Location: ' . $basePath . '/feed');
+			exit;
+		}
+
+		$commentId = (int) ($_POST['comment_id'] ?? 0);
+		if ($commentId <= 0) {
+			header('Location: ' . $basePath . '/feed');
+			exit;
+		}
+
+		try {
+			$pdo = $this->getPdo();
+			$commentStmt = $pdo->prepare('SELECT user_id FROM comments WHERE id = :id LIMIT 1');
+			$commentStmt->execute(['id' => $commentId]);
+			$comment = $commentStmt->fetch();
+
+			if (!$comment || (int) $comment['user_id'] !== (int) $_SESSION['user_id']) {
+				$_SESSION['publish_error'] = 'Vous ne pouvez supprimer que vos propres commentaires.';
+				header('Location: ' . $basePath . '/feed');
+				exit;
+			}
+
+			$deleteStmt = $pdo->prepare('DELETE FROM comments WHERE id = :id AND user_id = :user_id');
+			$deleteStmt->execute([
+				'id' => $commentId,
+				'user_id' => (int) $_SESSION['user_id'],
+			]);
+		} catch (\PDOException $exception) {
+			$_SESSION['publish_error'] = 'Impossible de supprimer ce commentaire pour le moment.';
+		}
+
+		header('Location: ' . $basePath . '/feed');
+		exit;
+	}
+
 	public function delete(): void {
 		$basePath = $this->getBasePath();
 
