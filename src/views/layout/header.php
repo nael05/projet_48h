@@ -174,7 +174,7 @@ $mockUrl = $mockUrl ?? 'localhost:3000/';
       <a href="/feed"     class="header__nav-link <?= $activeNav==='feed'     ? 'active':'' ?>">Fil</a>
       <a href="/profile"  class="header__nav-link <?= $activeNav==='profile'  ? 'active':'' ?>">Profil</a>
       <a href="/messages" class="header__nav-link <?= $activeNav==='messages' ? 'active':'' ?>">Messages</a>
-      <a href="#"         class="header__nav-link">Ymatch</a>
+      <a href="https://ymatch.ynov.com/login" target="_blank" class="header__nav-link">Ymatch</a>
     </nav>
 
     <div class="header__bell">
