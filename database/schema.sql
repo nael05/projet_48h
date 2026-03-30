@@ -115,10 +115,14 @@ CREATE TABLE messages (
   sender_id BIGINT UNSIGNED NOT NULL,
   receiver_id BIGINT UNSIGNED NOT NULL,
   content TEXT NOT NULL,
+  image_path VARCHAR(255),
+  image_paths TEXT,
+  shared_post_id BIGINT UNSIGNED,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   
   FOREIGN KEY (sender_id) REFERENCES users(id) ON DELETE CASCADE,
-  FOREIGN KEY (receiver_id) REFERENCES users(id) ON DELETE CASCADE
+  FOREIGN KEY (receiver_id) REFERENCES users(id) ON DELETE CASCADE,
+  FOREIGN KEY (shared_post_id) REFERENCES posts(id) ON DELETE SET NULL
 ) ENGINE=InnoDB;
 
 -- NEWS

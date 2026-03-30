@@ -32,6 +32,11 @@
     }
   </style>
 
+  <?php
+    $sessionProfilePicture = trim((string) ($_SESSION['profile_picture'] ?? ''));
+    $sessionAvatarUrl = $sessionProfilePicture !== '' ? (($basePath ?? '') . $sessionProfilePicture) : '';
+  ?>
+
   <div style="flex:1; padding:24px;">
     <main style="max-width:1200px;margin:0 auto;padding:28px;background:var(--container-gradient);backdrop-filter:blur(10px);border-radius:16px;box-shadow:0 12px 40px rgba(0,0,0,0.15);display:grid;grid-template-columns:1fr 360px;gap:24px;">
 
@@ -50,7 +55,11 @@
           <?php endif; ?>
 
           <form action="<?= htmlspecialchars(($basePath ?? '') . '/posts', ENT_QUOTES, 'UTF-8') ?>" method="POST" enctype="multipart/form-data" style="display:flex;gap:14px;">
-            <div style="width:46px;height:46px;border-radius:50%;background:#d1d5db;flex-shrink:0;"></div>
+            <div style="width:46px;height:46px;border-radius:50%;background:#d1d5db;flex-shrink:0;overflow:hidden;">
+              <?php if ($sessionAvatarUrl !== ''): ?>
+              <img src="<?= htmlspecialchars($sessionAvatarUrl, ENT_QUOTES, 'UTF-8') ?>" alt="Mon avatar" style="width:100%;height:100%;object-fit:cover;">
+              <?php endif; ?>
+            </div>
             <div style="flex:1;">
               <textarea name="content" rows="3" placeholder="Quoi de neuf sur le campus ?" required
                 style="width:100%;background:#f9fafb;border:1.5px solid #e5e7eb;border-radius:6px;padding:12px;font-family:'Roboto',sans-serif;font-size:13.5px;color:#374151;resize:none;outline:none;transition:border-color .2s;"
@@ -89,6 +98,8 @@
           if ($displayName === '') {
               $displayName = (string) ($post['username'] ?? 'Utilisateur');
           }
+            $postProfilePicture = trim((string) ($post['profile_picture'] ?? ''));
+            $postAvatarUrl = $postProfilePicture !== '' ? (($basePath ?? '') . $postProfilePicture) : '';
           $publishedAt = '';
           if (!empty($post['created_at'])) {
               $timestamp = strtotime((string) $post['created_at']);
@@ -103,7 +114,11 @@
         <div class="card feed-post-card" style="padding:14px;">
           <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px;">
             <div style="display:flex;align-items:center;gap:12px;">
-              <a href="<?= htmlspecialchars(($basePath ?? '') . '/user?id=' . $postUserId, ENT_QUOTES, 'UTF-8') ?>" style="display:block;width:42px;height:42px;border-radius:50%;background:#d1d5db;flex-shrink:0;"></a>
+              <a href="<?= htmlspecialchars(($basePath ?? '') . '/user?id=' . $postUserId, ENT_QUOTES, 'UTF-8') ?>" style="display:block;width:42px;height:42px;border-radius:50%;background:#d1d5db;flex-shrink:0;overflow:hidden;">
+                <?php if ($postAvatarUrl !== ''): ?>
+                <img src="<?= htmlspecialchars($postAvatarUrl, ENT_QUOTES, 'UTF-8') ?>" alt="Avatar de <?= htmlspecialchars($displayName, ENT_QUOTES, 'UTF-8') ?>" style="width:100%;height:100%;object-fit:cover;">
+                <?php endif; ?>
+              </a>
               <div>
                 <a href="<?= htmlspecialchars(($basePath ?? '') . '/user?id=' . $postUserId, ENT_QUOTES, 'UTF-8') ?>" style="font-family:'Montserrat',sans-serif;font-size:14px;font-weight:700;color:#111827;display:inline-block;">
                   <?= htmlspecialchars($displayName, ENT_QUOTES, 'UTF-8') ?>
@@ -149,8 +164,22 @@
               </svg>
               <span><?= count($postComments) ?> commentaire<?= count($postComments) > 1 ? 's' : '' ?></span>
             </button>
+            <button
+              class="btn-secondary"
+              type="button"
+              style="display:flex;align-items:center;justify-content:center;gap:0;margin-left:auto;padding:8px 10px;"
+              data-share-post-id="<?= $postId ?>"
+              onclick="openSharePostModal(this)"
+              title="Partager en message privé"
+              aria-label="Partager en message privé"
+            >
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M22 2L11 13"></path>
+                <path d="M22 2L15 22L11 13L2 9L22 2Z"></path>
+              </svg>
+            </button>
             <?php if ($isOwnPost): ?>
-            <form action="<?= htmlspecialchars(($basePath ?? '') . '/posts/delete', ENT_QUOTES, 'UTF-8') ?>" method="POST" style="margin:0 0 0 auto;" onsubmit="return confirm('Supprimer ce post ?');">
+            <form action="<?= htmlspecialchars(($basePath ?? '') . '/posts/delete', ENT_QUOTES, 'UTF-8') ?>" method="POST" style="margin:0;" onsubmit="return confirm('Supprimer ce post ?');">
               <input type="hidden" name="post_id" value="<?= $postId ?>">
               <button type="submit" class="btn-outline" title="Supprimer le post" aria-label="Supprimer le post" style="border-color:#fecaca;color:#b91c1c;background:#fff5f5;padding:6px 10px;line-height:1;">
                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -275,10 +304,16 @@
               if ($suggestedDisplayName === '') {
                   $suggestedDisplayName = (string) ($suggestedUser['username'] ?? 'Utilisateur');
               }
+              $suggestedProfilePicture = trim((string) ($suggestedUser['profile_picture'] ?? ''));
+              $suggestedAvatarUrl = $suggestedProfilePicture !== '' ? (($basePath ?? '') . $suggestedProfilePicture) : '';
             ?>
             <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 16px;<?= $i>0 ? 'border-top:1px solid #f3f4f6':'' ?>">
               <a href="<?= htmlspecialchars(($basePath ?? '') . '/user?id=' . $suggestedUserId, ENT_QUOTES, 'UTF-8') ?>" style="display:flex;align-items:center;gap:10px;color:inherit;text-decoration:none;min-width:0;">
-                <div style="width:36px;height:36px;border-radius:50%;background:#d1d5db;flex-shrink:0;"></div>
+                <div style="width:36px;height:36px;border-radius:50%;background:#d1d5db;flex-shrink:0;overflow:hidden;">
+                  <?php if ($suggestedAvatarUrl !== ''): ?>
+                  <img src="<?= htmlspecialchars($suggestedAvatarUrl, ENT_QUOTES, 'UTF-8') ?>" alt="Avatar de <?= htmlspecialchars($suggestedDisplayName, ENT_QUOTES, 'UTF-8') ?>" style="width:100%;height:100%;object-fit:cover;">
+                  <?php endif; ?>
+                </div>
                 <div style="font-size:12px;color:#374151;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:150px;"><?= htmlspecialchars($suggestedDisplayName, ENT_QUOTES, 'UTF-8') ?></div>
               </a>
               <a href="<?= htmlspecialchars(($basePath ?? '') . '/messages?with=' . $suggestedUserId, ENT_QUOTES, 'UTF-8') ?>" class="btn-outline" style="font-size:12px;padding:5px 12px;">Message</a>
@@ -291,3 +326,86 @@
       </div>
     </main>
   </div>
+
+  <div id="share-post-modal" style="display:none;position:fixed;inset:0;background:rgba(15,23,42,.45);z-index:1000;align-items:center;justify-content:center;padding:16px;">
+    <div style="width:100%;max-width:460px;background:#fff;border-radius:12px;box-shadow:0 18px 40px rgba(0,0,0,.2);overflow:hidden;">
+      <div style="padding:14px 16px;border-bottom:1px solid #e5e7eb;display:flex;justify-content:space-between;align-items:center;gap:12px;">
+        <h3 style="font-family:'Montserrat',sans-serif;font-size:15px;font-weight:700;color:#111827;">Partager la publication</h3>
+        <button type="button" class="btn-outline" onclick="closeSharePostModal()" style="padding:5px 10px;font-size:12px;">Fermer</button>
+      </div>
+
+      <form action="<?= htmlspecialchars(($basePath ?? '') . '/messages/share', ENT_QUOTES, 'UTF-8') ?>" method="POST" style="padding:14px 16px;display:flex;flex-direction:column;gap:10px;">
+        <input id="share-post-id-input" type="hidden" name="post_id" value="">
+
+        <?php if (empty($shareRecipients)): ?>
+        <div style="padding:10px;border:1px solid #e5e7eb;border-radius:8px;background:#f9fafb;font-size:13px;color:#6b7280;">Aucun destinataire disponible.</div>
+        <?php else: ?>
+        <div style="max-height:280px;overflow:auto;border:1px solid #e5e7eb;border-radius:8px;">
+          <?php foreach ($shareRecipients as $index => $recipient): ?>
+          <?php
+            $recipientId = (int) ($recipient['id'] ?? 0);
+            $recipientName = trim(((string) ($recipient['prenom'] ?? '')) . ' ' . ((string) ($recipient['nom'] ?? '')));
+            if ($recipientName === '') {
+                $recipientName = (string) ($recipient['username'] ?? 'Utilisateur');
+            }
+            $recipientProfilePicture = trim((string) ($recipient['profile_picture'] ?? ''));
+            $recipientAvatarUrl = $recipientProfilePicture !== '' ? (($basePath ?? '') . $recipientProfilePicture) : '';
+          ?>
+          <label style="display:flex;align-items:center;gap:10px;padding:10px 12px;cursor:pointer;<?= $index > 0 ? 'border-top:1px solid #f3f4f6;' : '' ?>">
+            <input type="radio" name="receiver_id" value="<?= $recipientId ?>" <?= $index === 0 ? 'checked' : '' ?> required>
+            <div style="width:34px;height:34px;border-radius:50%;background:#d1d5db;overflow:hidden;flex-shrink:0;">
+              <?php if ($recipientAvatarUrl !== ''): ?>
+              <img src="<?= htmlspecialchars($recipientAvatarUrl, ENT_QUOTES, 'UTF-8') ?>" alt="Avatar de <?= htmlspecialchars($recipientName, ENT_QUOTES, 'UTF-8') ?>" style="width:100%;height:100%;object-fit:cover;">
+              <?php endif; ?>
+            </div>
+            <span style="font-size:13px;color:#111827;font-weight:600;"><?= htmlspecialchars($recipientName, ENT_QUOTES, 'UTF-8') ?></span>
+          </label>
+          <?php endforeach; ?>
+        </div>
+        <?php endif; ?>
+
+        <div style="display:flex;justify-content:flex-end;gap:8px;padding-top:4px;">
+          <button type="button" class="btn-outline" onclick="closeSharePostModal()">Annuler</button>
+          <button type="submit" class="btn-dark" <?= empty($shareRecipients) ? 'disabled' : '' ?>>Partager</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+  (function () {
+    var modal = document.getElementById('share-post-modal');
+    var postInput = document.getElementById('share-post-id-input');
+
+    window.openSharePostModal = function (trigger) {
+      if (!modal || !postInput || !trigger) {
+        return;
+      }
+
+      var postId = String(trigger.getAttribute('data-share-post-id') || '').trim();
+      if (!postId) {
+        return;
+      }
+
+      postInput.value = postId;
+      modal.style.display = 'flex';
+    };
+
+    window.closeSharePostModal = function () {
+      if (!modal || !postInput) {
+        return;
+      }
+
+      postInput.value = '';
+      modal.style.display = 'none';
+    };
+
+    if (modal) {
+      modal.addEventListener('click', function (event) {
+        if (event.target === modal) {
+          window.closeSharePostModal();
+        }
+      });
+    }
+  })();
+  </script>

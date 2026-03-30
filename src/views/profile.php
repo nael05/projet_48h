@@ -136,7 +136,11 @@
               <div class="card" style="padding:14px;background:rgba(255,255,255,0.6);border:1px solid rgba(255,255,255,0.5);min-height:470px;display:flex;flex-direction:column;">
                 <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px;">
                   <div style="display:flex;align-items:center;gap:10px;">
-                    <div style="width:38px;height:38px;border-radius:50%;background:#d1d5db;"></div>
+                    <div style="width:38px;height:38px;border-radius:50%;background:#d1d5db;overflow:hidden;">
+                      <?php if (!empty($profilePicture)): ?>
+                      <img src="<?= htmlspecialchars(($basePath ?? '') . $profilePicture, ENT_QUOTES, 'UTF-8') ?>" alt="Avatar de <?= htmlspecialchars($profileFullName, ENT_QUOTES, 'UTF-8') ?>" style="width:100%;height:100%;object-fit:cover;">
+                      <?php endif; ?>
+                    </div>
                     <div style="font-family:'Montserrat',sans-serif;font-size:13px;font-weight:700;color:#111827;"><?= htmlspecialchars($profileFullName ?? 'Utilisateur', ENT_QUOTES, 'UTF-8') ?></div>
                   </div>
                   <span style="font-size:11px;color:#9ca3af;"><?= htmlspecialchars($publishedAt, ENT_QUOTES, 'UTF-8') ?></span>

@@ -26,11 +26,12 @@ class FeedController {
         $likedPostIds = [];
         $commentsByPost = [];
         $suggestedUsers = [];
+        $shareRecipients = [];
         try {
             $pdo = $this->getPdo();
             $this->ensurePostsImageColumn($pdo);
             $stmt = $pdo->query(
-                'SELECT p.id, p.user_id, p.content, p.image_path, p.created_at, u.username, u.prenom, u.nom
+                'SELECT p.id, p.user_id, p.content, p.image_path, p.created_at, u.username, u.prenom, u.nom, u.profile_picture
                  FROM posts p
                  INNER JOIN users u ON u.id = p.user_id
                  ORDER BY p.created_at DESC'
@@ -81,7 +82,7 @@ class FeedController {
             }
 
             $suggestedStmt = $pdo->prepare(
-                'SELECT id, username, prenom, nom
+                'SELECT id, username, prenom, nom, profile_picture
                  FROM users
                  WHERE id <> :current_user_id
                  ORDER BY id DESC
@@ -89,9 +90,20 @@ class FeedController {
             );
             $suggestedStmt->execute(['current_user_id' => (int) $_SESSION['user_id']]);
             $suggestedUsers = $suggestedStmt->fetchAll() ?: [];
+
+            $shareRecipientsStmt = $pdo->prepare(
+                'SELECT id, username, prenom, nom, profile_picture
+                 FROM users
+                 WHERE id <> :current_user_id
+                 ORDER BY prenom ASC, nom ASC, username ASC
+                 LIMIT 50'
+            );
+            $shareRecipientsStmt->execute(['current_user_id' => (int) $_SESSION['user_id']]);
+            $shareRecipients = $shareRecipientsStmt->fetchAll() ?: [];
         } catch (\PDOException $exception) {
             $posts = [];
             $suggestedUsers = [];
+            $shareRecipients = [];
             if ($publishError === null) {
                 $publishError = 'Le fil est indisponible pour le moment.';
             }
