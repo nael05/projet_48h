@@ -144,4 +144,5 @@
     </main>
   </div>
 
-<?php include 'layout/footer.php'; ?>
+<?php include '../../api_google/chat-widget.html'; ?>
+<?php include 'layout/header.php'; ?>
