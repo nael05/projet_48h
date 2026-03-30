@@ -9,27 +9,25 @@
           <h2>Publier</h2><span class="sep"></span>
         </div>
         <div class="card" style="padding:20px;">
-          <div style="display:flex;gap:14px;">
+          <?php if (!empty($publishError)): ?>
+          <div style="margin-bottom:12px;padding:10px 12px;background:#fee2e2;border:1px solid #fca5a5;color:#991b1b;border-radius:6px;font-size:13px;">
+            <?= htmlspecialchars((string) $publishError, ENT_QUOTES, 'UTF-8') ?>
+          </div>
+          <?php endif; ?>
+
+          <form action="<?= htmlspecialchars(($basePath ?? '') . '/posts', ENT_QUOTES, 'UTF-8') ?>" method="POST" style="display:flex;gap:14px;">
             <div style="width:46px;height:46px;border-radius:50%;background:#d1d5db;flex-shrink:0;"></div>
             <div style="flex:1;">
-              <textarea rows="3" placeholder="Quoi de neuf sur le campus ?"
+              <textarea name="content" rows="3" placeholder="Quoi de neuf sur le campus ?" required
                 style="width:100%;background:#f9fafb;border:1.5px solid #e5e7eb;border-radius:6px;padding:12px;font-family:'Roboto',sans-serif;font-size:13.5px;color:#374151;resize:none;outline:none;transition:border-color .2s;"
-                onfocus="this.style.borderColor='#374151'" onblur="this.style.borderColor='#e5e7eb'"></textarea>
+                onfocus="this.style.borderColor='#374151'" onblur="this.style.borderColor='#e5e7eb'"><?= htmlspecialchars((string) ($oldPostContent ?? ''), ENT_QUOTES, 'UTF-8') ?></textarea>
               <div style="margin-top:10px;display:flex;align-items:center;gap:8px;">
-                <button class="btn-outline">
-                  <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
-                  + Image
-                </button>
-                <button class="btn-outline">
-                  <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
-                  Compétence
-                </button>
-                <button class="btn-dark" style="margin-left:auto;">Publier</button>
+                <button class="btn-dark" type="submit" style="margin-left:auto;">Publier</button>
               </div>
             </div>
-          </div>
+          </form>
           <div style="margin-top:14px;padding-top:12px;border-top:1px dashed var(--gray-400);">
-            <span class="badge-api">POST /posts — multer upload</span>
+            <span class="badge-api">POST /posts</span>
           </div>
         </div>
 
@@ -38,45 +36,50 @@
           <h2>Fil d'actualité</h2><span class="sep"></span>
         </div>
 
-        <!-- Post 1 -->
+        <?php if (empty($posts)): ?>
+        <div class="card" style="padding:20px;">
+          <p style="font-size:14px;color:#4b5563;">Aucune publication pour le moment. Sois le premier a publier.</p>
+        </div>
+        <?php else: ?>
+        <?php foreach ($posts as $post): ?>
+        <?php
+          $displayName = trim(((string) ($post['prenom'] ?? '')) . ' ' . ((string) ($post['nom'] ?? '')));
+          if ($displayName === '') {
+              $displayName = (string) ($post['username'] ?? 'Utilisateur');
+          }
+          $publishedAt = '';
+          if (!empty($post['created_at'])) {
+              $timestamp = strtotime((string) $post['created_at']);
+              if ($timestamp !== false) {
+                  $publishedAt = date('d/m/Y H:i', $timestamp);
+              }
+          }
+        ?>
         <div class="card" style="padding:20px;">
           <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px;">
             <div style="display:flex;align-items:center;gap:12px;">
               <div style="width:42px;height:42px;border-radius:50%;background:#d1d5db;flex-shrink:0;"></div>
-              <div><div class="skel" style="width:120px;height:11px;margin-bottom:6px;"></div><div class="skel" style="width:75px;height:9px;"></div></div>
+              <div>
+                <div style="font-family:'Montserrat',sans-serif;font-size:14px;font-weight:700;color:#111827;">
+                  <?= htmlspecialchars($displayName, ENT_QUOTES, 'UTF-8') ?>
+                </div>
+                <div style="font-size:12px;color:#6b7280;">Publication campus</div>
+              </div>
             </div>
-            <span style="font-size:11.5px;color:#9ca3af;font-weight:500;">il y a 5 min</span>
+            <span style="font-size:11.5px;color:#9ca3af;font-weight:500;"><?= htmlspecialchars($publishedAt, ENT_QUOTES, 'UTF-8') ?></span>
           </div>
-          <div style="margin-bottom:14px;"><div class="skel" style="width:100%;height:10px;margin-bottom:7px;"></div><div class="skel" style="width:82%;height:10px;"></div></div>
-          <div style="width:100%;height:210px;background:#e5e7eb;border:1px solid #d1d5db;border-radius:6px;display:flex;align-items:center;justify-content:center;margin-bottom:14px;">
-            <span style="color:#9ca3af;font-family:'SFMono-Regular',monospace;font-size:12px;letter-spacing:.05em;">[ image ]</span>
-          </div>
-          <div style="display:flex;gap:8px;margin-bottom:14px;">
-            <span style="padding:3px 12px;border-radius:99px;border:1px solid #d1d5db;font-size:11.5px;color:#374151;background:#f9fafb;font-weight:600;">React</span>
-            <span style="padding:3px 12px;border-radius:99px;border:1px solid #d1d5db;font-size:11.5px;color:#374151;background:#f9fafb;font-weight:600;">Frontend</span>
-          </div>
-          <div style="display:flex;gap:8px;padding-top:12px;border-top:1px solid #f3f4f6;">
-            <button class="btn-secondary"><span style="font-size:14px;">👍</span> Like</button>
-            <button class="btn-secondary"><span style="font-size:14px;">💬</span> Commenter</button>
-            <button class="btn-outline" style="margin-left:auto;">Envoyer msg →</button>
-          </div>
-        </div>
 
-        <!-- Post 2 -->
-        <div class="card" style="padding:20px;">
-          <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px;">
-            <div style="display:flex;align-items:center;gap:12px;">
-              <div style="width:42px;height:42px;border-radius:50%;background:#d1d5db;flex-shrink:0;"></div>
-              <div><div class="skel" style="width:100px;height:11px;margin-bottom:6px;"></div><div class="skel" style="width:60px;height:9px;"></div></div>
-            </div>
-            <span style="font-size:11.5px;color:#9ca3af;font-weight:500;">il y a 1h</span>
+          <div style="font-size:14px;line-height:1.55;color:#374151;white-space:normal;word-break:break-word;">
+            <?= nl2br(htmlspecialchars((string) ($post['content'] ?? ''), ENT_QUOTES, 'UTF-8')) ?>
           </div>
-          <div style="margin-bottom:14px;"><div class="skel" style="width:100%;height:10px;margin-bottom:7px;"></div><div class="skel" style="width:70%;height:10px;margin-bottom:7px;"></div><div class="skel" style="width:55%;height:10px;"></div></div>
-          <div style="display:flex;gap:8px;padding-top:12px;border-top:1px solid #f3f4f6;">
-            <button class="btn-secondary"><span style="font-size:14px;">👍</span> Like</button>
-            <button class="btn-secondary"><span style="font-size:14px;">💬</span> Commenter</button>
+
+          <div style="display:flex;gap:8px;padding-top:12px;margin-top:12px;border-top:1px solid #f3f4f6;">
+            <button class="btn-secondary" type="button"><span style="font-size:14px;">👍</span> Like</button>
+            <button class="btn-secondary" type="button"><span style="font-size:14px;">💬</span> Commenter</button>
           </div>
         </div>
+        <?php endforeach; ?>
+        <?php endif; ?>
 
         <!-- Charger plus -->
         <div style="text-align:center;padding:4px 0 12px;">

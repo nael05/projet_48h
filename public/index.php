@@ -32,6 +32,7 @@ $router->add('/logout', 'AuthController', 'logout');
 
 $router->add('/feed', 'FeedController', 'index');
 $router->add('/feed.php', 'FeedController', 'index');
+$router->add('/posts', 'PostController', 'create');
 $router->add('/profile', 'ProfileController', 'show');
 $router->add('/messages', 'MessageController', 'index');
 
