@@ -59,62 +59,63 @@
 
             <!-- Droite : Publications + Stats -->
             <div style="display:flex;flex-direction:column;gap:20px;">
-              <!-- Filtres publications -->
               <div>
                 <div class="section-header"><h2>Publications</h2><span class="sep"></span></div>
-                <div style="display:flex;gap:8px;margin-bottom:16px;">
-                  <button class="btn-dark" style="padding:7px 18px;font-size:12.5px;">Tous</button>
-                  <button class="btn-outline" style="padding:7px 18px;font-size:12.5px;">Projets</button>
-                  <button class="btn-outline" style="padding:7px 18px;font-size:12.5px;">Recherches</button>
-                </div>
               </div>
 
-              <!-- Post card 1 -->
+              <?php if (empty($profilePosts)): ?>
+              <div class="card" style="padding:18px;background:rgba(255,255,255,0.6);border:1px solid rgba(255,255,255,0.5);">
+                <p style="font-size:14px;color:#4b5563;">Aucune publication pour cet utilisateur.</p>
+              </div>
+              <?php else: ?>
+              <?php foreach ($profilePosts as $profilePost): ?>
+              <?php
+                $publishedAt = '';
+                if (!empty($profilePost['created_at'])) {
+                    $timestamp = strtotime((string) $profilePost['created_at']);
+                    if ($timestamp !== false) {
+                        $publishedAt = date('d/m/Y H:i', $timestamp);
+                    }
+                }
+                $likeCount = (int) ($profilePost['like_count'] ?? 0);
+                $commentCount = (int) ($profilePost['comment_count'] ?? 0);
+              ?>
               <div class="card" style="padding:18px;background:rgba(255,255,255,0.6);border:1px solid rgba(255,255,255,0.5);">
                 <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px;">
                   <div style="display:flex;align-items:center;gap:10px;">
                     <div style="width:38px;height:38px;border-radius:50%;background:#d1d5db;"></div>
-                    <div class="skel" style="width:100px;height:10px;"></div>
+                    <div style="font-family:'Montserrat',sans-serif;font-size:13px;font-weight:700;color:#111827;"><?= htmlspecialchars($profileFullName ?? 'Utilisateur', ENT_QUOTES, 'UTF-8') ?></div>
                   </div>
-                  <span style="font-size:11px;color:#9ca3af;">2 jours</span>
+                  <span style="font-size:11px;color:#9ca3af;"><?= htmlspecialchars($publishedAt, ENT_QUOTES, 'UTF-8') ?></span>
                 </div>
-                <div style="margin-bottom:12px;"><div class="skel" style="height:9px;width:100%;margin-bottom:6px;"></div><div class="skel" style="height:9px;width:72%;"></div></div>
-                <div style="width:100%;height:130px;background:#e5e7eb;border:1px solid #d1d5db;border-radius:5px;display:flex;align-items:center;justify-content:center;margin-bottom:12px;">
-                  <span style="font-family:'SFMono-Regular',monospace;font-size:11px;color:#9ca3af;">[ image ]</span>
-                </div>
-                <div style="display:flex;justify-content:space-between;align-items:center;padding-top:10px;border-top:1px solid #f3f4f6;">
-                  <div style="display:flex;gap:8px;">
-                    <span style="font-size:12px;color:#6b7280;background:#f9fafb;border:1px solid #e5e7eb;border-radius:4px;padding:3px 10px;display:flex;align-items:center;gap:4px;"><span>👍</span> 12</span>
-                    <span style="font-size:12px;color:#6b7280;background:#f9fafb;border:1px solid #e5e7eb;border-radius:4px;padding:3px 10px;display:flex;align-items:center;gap:4px;"><span>💬</span> 3</span>
-                  </div>
-                  <button style="font-size:12px;color:#dc2626;background:#fff;border:1px solid #fca5a5;border-radius:4px;padding:4px 12px;cursor:pointer;font-family:'Montserrat',sans-serif;font-weight:600;">Supprimer</button>
-                </div>
-              </div>
 
-              <!-- Post card 2 -->
-              <div class="card" style="padding:18px;background:rgba(255,255,255,0.6);border:1px solid rgba(255,255,255,0.5);">
-                <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px;">
-                  <div style="display:flex;align-items:center;gap:10px;">
-                    <div style="width:38px;height:38px;border-radius:50%;background:#d1d5db;"></div>
-                    <div class="skel" style="width:85px;height:10px;"></div>
-                  </div>
-                  <span style="font-size:11px;color:#9ca3af;">5 jours</span>
+                <div style="font-size:14px;line-height:1.55;color:#374151;white-space:normal;word-break:break-word;margin-bottom:12px;">
+                  <?= nl2br(htmlspecialchars((string) ($profilePost['content'] ?? ''), ENT_QUOTES, 'UTF-8')) ?>
                 </div>
-                <div style="margin-bottom:12px;"><div class="skel" style="height:9px;width:100%;margin-bottom:6px;"></div><div class="skel" style="height:9px;width:60%;"></div></div>
-                <div style="display:flex;justify-content:space-between;align-items:center;padding-top:10px;border-top:1px solid #f3f4f6;">
-                  <div style="display:flex;gap:8px;">
-                    <span style="font-size:12px;color:#6b7280;background:#f9fafb;border:1px solid #e5e7eb;border-radius:4px;padding:3px 10px;display:flex;align-items:center;gap:4px;"><span>👍</span> 8</span>
-                    <span style="font-size:12px;color:#6b7280;background:#f9fafb;border:1px solid #e5e7eb;border-radius:4px;padding:3px 10px;display:flex;align-items:center;gap:4px;"><span>💬</span> 1</span>
-                  </div>
-                  <button style="font-size:12px;color:#dc2626;background:#fff;border:1px solid #fca5a5;border-radius:4px;padding:4px 12px;cursor:pointer;font-family:'Montserrat',sans-serif;font-weight:600;">Supprimer</button>
+
+                <?php if (!empty($profilePost['image_path'])): ?>
+                <div style="margin-bottom:12px;">
+                  <img
+                    src="<?= htmlspecialchars(($basePath ?? '') . (string) $profilePost['image_path'], ENT_QUOTES, 'UTF-8') ?>"
+                    alt="Image du post"
+                    style="max-width:100%;max-height:300px;border-radius:8px;border:1px solid #d1d5db;object-fit:cover;"
+                  >
+                </div>
+                <?php endif; ?>
+
+                <div style="display:flex;justify-content:flex-start;align-items:center;padding-top:10px;border-top:1px solid #f3f4f6;gap:8px;">
+                  <span style="font-size:12px;color:#6b7280;background:#f9fafb;border:1px solid #e5e7eb;border-radius:4px;padding:3px 10px;display:flex;align-items:center;gap:4px;"><span>❤</span> <?= $likeCount ?></span>
+                  <span style="font-size:12px;color:#6b7280;background:#f9fafb;border:1px solid #e5e7eb;border-radius:4px;padding:3px 10px;display:flex;align-items:center;gap:4px;"><span>💬</span> <?= $commentCount ?></span>
                 </div>
               </div>
+              <?php endforeach; ?>
+              <?php endif; ?>
 
               <!-- Statistiques -->
               <div>
                 <div class="section-header" style="margin-top:8px;"><h2>Statistiques</h2><span class="sep"></span></div>
                 <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;">
-                  <?php foreach ([['12','Publications'],['48','Abonnés'],['5','Compétences']] as $s): ?>
+                  <?php foreach ([[(string) ($profileStats['posts'] ?? 0),'Publications'],[(string) ($profileStats['likes'] ?? 0),'Likes'],[(string) ($profileStats['comments'] ?? 0),'Commentaires']] as $s): ?>
                   <div style="background:#f9fafb;border:1.5px solid #e5e7eb;border-radius:8px;padding:18px;text-align:center;">
                     <div style="font-family:'Montserrat',sans-serif;font-size:28px;font-weight:800;color:#111827;"><?= $s[0] ?></div>
                     <div style="font-size:11px;color:#6b7280;font-weight:500;text-transform:uppercase;letter-spacing:.07em;margin-top:4px;"><?= $s[1] ?></div>

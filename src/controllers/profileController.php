@@ -30,9 +30,17 @@ class ProfileController {
 
         $profileFullName = (string) ($_SESSION['username'] ?? 'Utilisateur');
         $profileFormation = 'Profil Ynov';
+        $profilePosts = [];
+        $profileStats = [
+            'posts' => 0,
+            'likes' => 0,
+            'comments' => 0,
+        ];
 
         try {
             $pdo = $this->getPdo();
+            $this->ensurePostsImageColumn($pdo);
+
             $stmt = $pdo->prepare('SELECT nom, prenom, formation FROM users WHERE id = :id LIMIT 1');
             $stmt->execute(['id' => $userId]);
             $user = $stmt->fetch();
@@ -54,6 +62,33 @@ class ProfileController {
 
             if ($formation !== '') {
                 $profileFormation = $formation;
+            }
+
+            $postsStmt = $pdo->prepare(
+                'SELECT p.id, p.content, p.image_path, p.created_at,
+                        COALESCE(l.total_likes, 0) AS like_count,
+                        COALESCE(c.total_comments, 0) AS comment_count
+                 FROM posts p
+                 LEFT JOIN (
+                    SELECT post_id, COUNT(*) AS total_likes
+                    FROM likes
+                    GROUP BY post_id
+                 ) l ON l.post_id = p.id
+                 LEFT JOIN (
+                    SELECT post_id, COUNT(*) AS total_comments
+                    FROM comments
+                    GROUP BY post_id
+                 ) c ON c.post_id = p.id
+                 WHERE p.user_id = :user_id
+                 ORDER BY p.created_at DESC'
+            );
+            $postsStmt->execute(['user_id' => $userId]);
+            $profilePosts = $postsStmt->fetchAll() ?: [];
+
+            $profileStats['posts'] = count($profilePosts);
+            foreach ($profilePosts as $profilePost) {
+                $profileStats['likes'] += (int) ($profilePost['like_count'] ?? 0);
+                $profileStats['comments'] += (int) ($profilePost['comment_count'] ?? 0);
             }
         } catch (\PDOException $exception) {
             // Fallback sur les valeurs de session en cas d'indisponibilite DB.
@@ -98,5 +133,14 @@ class ProfileController {
         ]);
 
         return $pdo;
+    }
+
+    private function ensurePostsImageColumn(\PDO $pdo): void {
+        $stmt = $pdo->query("SHOW COLUMNS FROM posts LIKE 'image_path'");
+        $exists = $stmt->fetch();
+
+        if (!$exists) {
+            $pdo->exec('ALTER TABLE posts ADD COLUMN image_path VARCHAR(255) NULL AFTER content');
+        }
     }
 }

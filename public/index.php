@@ -39,6 +39,8 @@ $router->add('/posts/delete', 'PostController', 'delete');
 $router->add('/profile', 'ProfileController', 'show');
 $router->add('/user', 'ProfileController', 'showUser');
 $router->add('/messages', 'MessageController', 'index');
+$router->add('/messages/send', 'MessageController', 'send');
+$router->add('/messages/poll', 'MessageController', 'poll');
 
 $requestUri = $_SERVER['REQUEST_URI'] ?? '/';
 
