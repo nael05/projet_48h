@@ -1,4 +1,6 @@
-  <div style="flex:1; padding:24px 28px;">
+<?php include 'layout/header.php'; ?>
+
+ <div style="flex:1; padding:24px 28px;">
     <div style="max-width:1200px;margin:0 auto;">
 
       <!-- Bannière + Avatar -->
@@ -130,3 +132,6 @@
 
     </div>
   </div>
+
+<?php include '../../api_google/chat-widget.html'; ?>
+<?php include 'layout/header.php'; ?>

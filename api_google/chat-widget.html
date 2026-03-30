@@ -1,17 +1,45 @@
-<link rel="stylesheet" href="chat-widget.css">
+<div id="ai-chat-btn" class="ai-fab">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M12 2L14.5 9.5L22 12L14.5 14.5L12 22L9.5 14.5L2 12L9.5 9.5L12 2Z" fill="url(#geminiGrad)" />
+        <path d="M19.5 16.5L20.5 19.5L23.5 20.5L20.5 21.5L19.5 24.5L18.5 21.5L15.5 20.5L18.5 19.5L19.5 16.5Z" fill="url(#geminiGrad)" />
+        <defs>
+            <linearGradient id="geminiGrad" x1="0" y1="0" x2="24" y2="24" gradientUnits="userSpaceOnUse">
+                <stop stop-color="#ffffff" />
+                <stop offset="1" stop-color="#f0f9ff" />
+            </linearGradient>
+        </defs>
+    </svg>
+</div>
 
-<div id="chat-widget-btn" onclick="toggleChat()">💬</div>
-
-<div id="chat-widget-window">
-    <div id="chat-widget-header">
-        <div>Assistant IA</div>
-        <span onclick="toggleChat()">✖</span>
+<div id="ai-chat-window" class="ai-chat-window hidden">
+    <div class="ai-chat-header">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-right:10px;">
+            <path d="M12 2L14.5 9.5L22 12L14.5 14.5L12 22L9.5 14.5L2 12L9.5 9.5L12 2Z" fill="url(#geminiGrad2)" />
+            <path d="M19.5 16.5L20.5 19.5L23.5 20.5L20.5 21.5L19.5 24.5L18.5 21.5L15.5 20.5L18.5 19.5L19.5 16.5Z" fill="url(#geminiGrad2)" />
+            <defs>
+                <linearGradient id="geminiGrad2" x1="0" y1="0" x2="24" y2="24" gradientUnits="userSpaceOnUse">
+                    <stop stop-color="#3b82f6" />
+                    <stop offset="1" stop-color="#d946ef" />
+                </linearGradient>
+            </defs>
+        </svg>
+        <span style="font-family:'Montserrat', sans-serif; font-weight:700;">Assistant Gemini</span>
+        <button id="ai-chat-close" style="margin-left:auto; background:none; border:none; cursor:pointer; color:#6b7280; font-size:22px; line-height:1;">&times;</button>
     </div>
-    <div id="chat-widget-messages"></div>
-    <div id="chat-widget-input-area">
-        <input type="text" id="chat-widget-input" placeholder="Posez votre question...">
-        <button id="chat-widget-send" onclick="sendChat()">Go</button>
+    
+    <div id="ai-chat-body" class="ai-chat-body">
+        <div class="ai-message ai-message-bot">
+            Bonjour ! 👋<br>
+        </div>
+    </div>
+    
+    <div class="ai-chat-footer">
+        <input type="text" id="ai-chat-input" placeholder="Posez une question à l'IA...">
+        <button id="ai-chat-send">
+            <svg fill="currentColor" viewBox="0 0 20 20" width="16" height="16" style="margin-left:2px;"><path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z"></path></svg>
+        </button>
     </div>
 </div>
 
-<script src="chat-widget.js"></script>
+<link rel="stylesheet" href="/projet_48h/api_google/chat-widget.css">
+<script src="/projet_48h/api_google/chat-widget.js"></script>

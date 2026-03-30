@@ -1,3 +1,5 @@
+<?php include 'layout/header.php'; ?>
+
   <div style="flex:1; padding:24px; display:flex; flex-direction:column; align-items:center;">
     <div style="width:100%; max-width:1200px; flex:1; display:flex; background:var(--container-gradient); backdrop-filter:blur(12px); border-radius:16px; overflow:hidden; box-shadow:0 12px 40px rgba(0,0,0,0.15); border:1px solid rgba(255,255,255,0.4);">
 
@@ -119,3 +121,6 @@
     </div>
   </div>
 </div>
+
+<?php include '../../api_google/chat-widget.html'; ?>
+<?php include 'layout/header.php'; ?>

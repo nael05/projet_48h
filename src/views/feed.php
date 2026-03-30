@@ -1,3 +1,5 @@
+<?php include 'layout/header.php'; ?>
+
   <div style="flex:1; padding:24px;">
     <main style="max-width:1200px;margin:0 auto;padding:28px;background:var(--container-gradient);backdrop-filter:blur(10px);border-radius:16px;box-shadow:0 12px 40px rgba(0,0,0,0.15);display:grid;grid-template-columns:1fr 360px;gap:24px;">
 
@@ -141,3 +143,5 @@
       </div>
     </main>
   </div>
+
+<?php include 'layout/footer.php'; ?>

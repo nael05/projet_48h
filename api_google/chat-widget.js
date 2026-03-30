@@ -1,60 +1,80 @@
-function toggleChat() {
-    const chatWindow = document.getElementById('chat-widget-window');
-    if (chatWindow.style.display === 'none' || chatWindow.style.display === '') {
-        chatWindow.style.display = 'flex';
-    } else {
-        chatWindow.style.display = 'none';
-    }
-}
+document.addEventListener('DOMContentLoaded', () => {
+    const btn = document.getElementById('ai-chat-btn');
+    const win = document.getElementById('ai-chat-window');
+    const close = document.getElementById('ai-chat-close');
+    const input = document.getElementById('ai-chat-input');
+    const send = document.getElementById('ai-chat-send');
+    const body = document.getElementById('ai-chat-body');
 
-async function sendChat() {
-    const inputField = document.getElementById('chat-widget-input');
-    const userMessage = inputField.value;
-    const messagesArea = document.getElementById('chat-widget-messages');
-    const pageContent = document.body.innerText;
-
-    if (!userMessage.trim()) return;
-
-    messagesArea.innerHTML += `<div class="msg-user">${userMessage}</div>`;
-    inputField.value = '';
-    messagesArea.scrollTop = messagesArea.scrollHeight;
-
-    const promptWithContext = "Texte de la page web actuelle : \n" + pageContent + "\n\nRéponds à cette question de l'utilisateur de façon concise : " + userMessage;
-
-    const loadingId = 'loading-' + Date.now();
-    messagesArea.innerHTML += `<div class="msg-ai" id="${loadingId}">Réflexion en cours...</div>`;
-    messagesArea.scrollTop = messagesArea.scrollHeight;
-
-    try {
-        const response = await fetch('api.php', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ message: promptWithContext })
-        });
-
-        const data = await response.json();
-        console.log(data);
-        
-        document.getElementById(loadingId).remove();
-        
-        if (data.candidates && data.candidates[0].content.parts[0].text) {
-            const aiText = data.candidates[0].content.parts[0].text;
-            messagesArea.innerHTML += `<div class="msg-ai">${aiText}</div>`;
-        } else if (data.error) {
-            messagesArea.innerHTML += `<div class="msg-ai" style="color: red;"><strong>Erreur Google :</strong> ${data.error.message}</div>`;
-        } else {
-            messagesArea.innerHTML += `<div class="msg-ai">Erreur lors de la génération.</div>`;
+    const toggleChat = () => {
+        win.classList.toggle('hidden');
+        if (!win.classList.contains('hidden')) {
+            input.focus();
         }
-    } catch (error) {
-        document.getElementById(loadingId).remove();
-        messagesArea.innerHTML += `<div class="msg-ai">Erreur de communication avec le serveur.</div>`;
+    };
+
+    btn.addEventListener('click', toggleChat);
+    close.addEventListener('click', toggleChat);
+
+    async function sendChat() {
+        const userMessage = input.value.trim();
+        const pageContent = document.body.innerText;
+
+        if (!userMessage) return;
+
+        const userDiv = document.createElement('div');
+        userDiv.className = 'ai-message ai-message-user';
+        userDiv.textContent = userMessage;
+        body.appendChild(userDiv);
+        
+        input.value = '';
+        body.scrollTop = body.scrollHeight;
+
+        const loadingId = 'loading-' + Date.now();
+        const thinkingDiv = document.createElement('div');
+        thinkingDiv.className = 'ai-message ai-message-bot';
+        thinkingDiv.id = loadingId;
+        thinkingDiv.innerHTML = '<i>Gemini réfléchit... ✨</i>';
+        body.appendChild(thinkingDiv);
+        body.scrollTop = body.scrollHeight;
+
+        const promptWithContext = "Texte de la page web actuelle : \n" + pageContent + "\n\nRéponds à cette question de l'utilisateur de façon concise : " + userMessage;
+
+        try {
+            const response = await fetch('/projet_48h/api_google/api.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ message: promptWithContext })
+            });
+
+            const data = await response.json();
+            
+            document.getElementById(loadingId).remove();
+
+            const botDiv = document.createElement('div');
+            botDiv.className = 'ai-message ai-message-bot';
+
+            if (data.candidates && data.candidates[0].content.parts[0].text) {
+                botDiv.textContent = data.candidates[0].content.parts[0].text;
+            } else {
+                botDiv.textContent = "Désolé, je rencontre une petite difficulté technique.";
+            }
+            
+            body.appendChild(botDiv);
+
+        } catch (error) {
+            document.getElementById(loadingId).remove();
+            const errDiv = document.createElement('div');
+            errDiv.className = 'ai-message ai-message-bot';
+            errDiv.textContent = "Erreur de connexion au serveur.";
+            body.appendChild(errDiv);
+        }
+
+        body.scrollTop = body.scrollHeight;
     }
 
-    messagesArea.scrollTop = messagesArea.scrollHeight;
-}
-
-document.getElementById('chat-widget-input').addEventListener('keypress', function (e) {
-    if (e.key === 'Enter') {
-        sendChat();
-    }
+    send.addEventListener('click', sendChat);
+    input.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') sendChat();
+    });
 });
