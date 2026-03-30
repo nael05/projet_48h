@@ -22,15 +22,62 @@ class FeedController {
         unset($_SESSION['publish_error'], $_SESSION['old_post_content']);
 
         $posts = [];
+        $likesCountByPost = [];
+        $likedPostIds = [];
+        $commentsByPost = [];
         try {
             $pdo = $this->getPdo();
+            $this->ensurePostsImageColumn($pdo);
             $stmt = $pdo->query(
-                'SELECT p.id, p.content, p.created_at, u.username, u.prenom, u.nom
+                'SELECT p.id, p.content, p.image_path, p.created_at, u.username, u.prenom, u.nom
                  FROM posts p
                  INNER JOIN users u ON u.id = p.user_id
                  ORDER BY p.created_at DESC'
             );
             $posts = $stmt->fetchAll() ?: [];
+
+            if (!empty($posts)) {
+                $postIds = array_map(static fn(array $row): int => (int) $row['id'], $posts);
+                $placeholders = implode(',', array_fill(0, count($postIds), '?'));
+
+                $likesStmt = $pdo->prepare(
+                    "SELECT post_id, COUNT(*) AS total_likes
+                     FROM likes
+                     WHERE post_id IN ($placeholders)
+                     GROUP BY post_id"
+                );
+                $likesStmt->execute($postIds);
+                foreach ($likesStmt->fetchAll() ?: [] as $likeRow) {
+                    $likesCountByPost[(int) $likeRow['post_id']] = (int) $likeRow['total_likes'];
+                }
+
+                $likedStmt = $pdo->prepare(
+                    "SELECT post_id
+                     FROM likes
+                     WHERE user_id = ? AND post_id IN ($placeholders)"
+                );
+                $likedStmt->execute(array_merge([(int) $_SESSION['user_id']], $postIds));
+                foreach ($likedStmt->fetchAll() ?: [] as $likedRow) {
+                    $likedPostIds[(int) $likedRow['post_id']] = true;
+                }
+
+                $commentsStmt = $pdo->prepare(
+                    "SELECT c.post_id, c.content, c.created_at, u.username, u.prenom, u.nom
+                     FROM comments c
+                     INNER JOIN users u ON u.id = c.user_id
+                     WHERE c.post_id IN ($placeholders)
+                     ORDER BY c.created_at ASC"
+                );
+                $commentsStmt->execute($postIds);
+                foreach ($commentsStmt->fetchAll() ?: [] as $commentRow) {
+                    $postId = (int) $commentRow['post_id'];
+                    if (!isset($commentsByPost[$postId])) {
+                        $commentsByPost[$postId] = [];
+                    }
+
+                    $commentsByPost[$postId][] = $commentRow;
+                }
+            }
         } catch (\PDOException $exception) {
             $posts = [];
             if ($publishError === null) {
@@ -64,5 +111,14 @@ class FeedController {
         ]);
 
         return $pdo;
+    }
+
+    private function ensurePostsImageColumn(\PDO $pdo): void {
+        $stmt = $pdo->query("SHOW COLUMNS FROM posts LIKE 'image_path'");
+        $exists = $stmt->fetch();
+
+        if (!$exists) {
+            $pdo->exec('ALTER TABLE posts ADD COLUMN image_path VARCHAR(255) NULL AFTER content');
+        }
     }
 }

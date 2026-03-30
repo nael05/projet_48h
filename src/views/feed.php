@@ -15,19 +15,23 @@
           </div>
           <?php endif; ?>
 
-          <form action="<?= htmlspecialchars(($basePath ?? '') . '/posts', ENT_QUOTES, 'UTF-8') ?>" method="POST" style="display:flex;gap:14px;">
+          <form action="<?= htmlspecialchars(($basePath ?? '') . '/posts', ENT_QUOTES, 'UTF-8') ?>" method="POST" enctype="multipart/form-data" style="display:flex;gap:14px;">
             <div style="width:46px;height:46px;border-radius:50%;background:#d1d5db;flex-shrink:0;"></div>
             <div style="flex:1;">
               <textarea name="content" rows="3" placeholder="Quoi de neuf sur le campus ?" required
                 style="width:100%;background:#f9fafb;border:1.5px solid #e5e7eb;border-radius:6px;padding:12px;font-family:'Roboto',sans-serif;font-size:13.5px;color:#374151;resize:none;outline:none;transition:border-color .2s;"
                 onfocus="this.style.borderColor='#374151'" onblur="this.style.borderColor='#e5e7eb'"><?= htmlspecialchars((string) ($oldPostContent ?? ''), ENT_QUOTES, 'UTF-8') ?></textarea>
               <div style="margin-top:10px;display:flex;align-items:center;gap:8px;">
+                <label class="btn-outline" style="cursor:pointer;">
+                  Ajouter une image
+                  <input type="file" name="image" accept="image/*" style="display:none;">
+                </label>
                 <button class="btn-dark" type="submit" style="margin-left:auto;">Publier</button>
               </div>
             </div>
           </form>
           <div style="margin-top:14px;padding-top:12px;border-top:1px dashed var(--gray-400);">
-            <span class="badge-api">POST /posts</span>
+            <span class="badge-api">POST /posts + image</span>
           </div>
         </div>
 
@@ -43,6 +47,7 @@
         <?php else: ?>
         <?php foreach ($posts as $post): ?>
         <?php
+          $postId = (int) ($post['id'] ?? 0);
           $displayName = trim(((string) ($post['prenom'] ?? '')) . ' ' . ((string) ($post['nom'] ?? '')));
           if ($displayName === '') {
               $displayName = (string) ($post['username'] ?? 'Utilisateur');
@@ -54,6 +59,9 @@
                   $publishedAt = date('d/m/Y H:i', $timestamp);
               }
           }
+          $likeCount = (int) ($likesCountByPost[$postId] ?? 0);
+          $isLiked = !empty($likedPostIds[$postId]);
+          $postComments = $commentsByPost[$postId] ?? [];
         ?>
         <div class="card" style="padding:20px;">
           <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px;">
@@ -73,10 +81,54 @@
             <?= nl2br(htmlspecialchars((string) ($post['content'] ?? ''), ENT_QUOTES, 'UTF-8')) ?>
           </div>
 
-          <div style="display:flex;gap:8px;padding-top:12px;margin-top:12px;border-top:1px solid #f3f4f6;">
-            <button class="btn-secondary" type="button"><span style="font-size:14px;">👍</span> Like</button>
-            <button class="btn-secondary" type="button"><span style="font-size:14px;">💬</span> Commenter</button>
+          <?php if (!empty($post['image_path'])): ?>
+          <div style="margin-top:12px;">
+            <img
+              src="<?= htmlspecialchars(($basePath ?? '') . (string) $post['image_path'], ENT_QUOTES, 'UTF-8') ?>"
+              alt="Image du post"
+              style="max-width:100%;max-height:340px;border-radius:8px;border:1px solid #e5e7eb;object-fit:cover;"
+            >
           </div>
+          <?php endif; ?>
+
+          <div style="display:flex;gap:8px;align-items:center;padding-top:12px;margin-top:12px;border-top:1px solid #f3f4f6;">
+            <form action="<?= htmlspecialchars(($basePath ?? '') . '/posts/like', ENT_QUOTES, 'UTF-8') ?>" method="POST" style="margin:0;">
+              <input type="hidden" name="post_id" value="<?= $postId ?>">
+              <button class="btn-secondary" type="submit" style="display:flex;align-items:center;gap:8px;">
+                <span style="font-size:18px;color:<?= $isLiked ? '#ef4444' : '#9ca3af' ?>;line-height:1;"><?= $isLiked ? '&#9829;' : '&#9825;' ?></span>
+                <span><?= $likeCount ?> Like<?= $likeCount > 1 ? 's' : '' ?></span>
+              </button>
+            </form>
+            <span style="font-size:12px;color:#6b7280;"><?= count($postComments) ?> commentaire<?= count($postComments) > 1 ? 's' : '' ?></span>
+          </div>
+
+          <div style="margin-top:12px;display:flex;flex-direction:column;gap:8px;">
+            <?php foreach ($postComments as $comment): ?>
+            <?php
+              $commentAuthor = trim(((string) ($comment['prenom'] ?? '')) . ' ' . ((string) ($comment['nom'] ?? '')));
+              if ($commentAuthor === '') {
+                  $commentAuthor = (string) ($comment['username'] ?? 'Utilisateur');
+              }
+            ?>
+            <div style="background:#f9fafb;border:1px solid #e5e7eb;border-radius:8px;padding:8px 10px;">
+              <div style="font-size:12px;font-weight:700;color:#111827;margin-bottom:3px;"><?= htmlspecialchars($commentAuthor, ENT_QUOTES, 'UTF-8') ?></div>
+              <div style="font-size:13px;color:#374151;line-height:1.45;"><?= nl2br(htmlspecialchars((string) ($comment['content'] ?? ''), ENT_QUOTES, 'UTF-8')) ?></div>
+            </div>
+            <?php endforeach; ?>
+          </div>
+
+          <form action="<?= htmlspecialchars(($basePath ?? '') . '/posts/comment', ENT_QUOTES, 'UTF-8') ?>" method="POST" style="margin-top:10px;display:flex;gap:8px;">
+            <input type="hidden" name="post_id" value="<?= $postId ?>">
+            <input
+              type="text"
+              name="comment_content"
+              placeholder="Ajouter un commentaire"
+              maxlength="1000"
+              required
+              style="flex:1;background:#f9fafb;border:1.5px solid #e5e7eb;border-radius:6px;padding:10px 12px;font-family:'Roboto',sans-serif;font-size:13px;color:#374151;outline:none;"
+            >
+            <button class="btn-dark" type="submit">Commenter</button>
+          </form>
         </div>
         <?php endforeach; ?>
         <?php endif; ?>
