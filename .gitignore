@@ -1,0 +1,4 @@
+# Ignorer les fichiers de configuration secrets
+config.php
+api_google/config.php
+/api_google/config.php
