@@ -21,9 +21,9 @@ class Router {
         // Nettoyage de l'URI (suppression des Query Parameters pour la correspondance exacte)
         $uri = parse_url($uri, PHP_URL_PATH);
 
-        // Si la racine est demandée, on redirige vers /feed par défaut
+        // Si la racine est demandee, on redirige vers /login par defaut
         if ($uri === '/') {
-            $uri = '/feed';
+            $uri = '/login';
         }
 
         if (array_key_exists($uri, $this->routes)) {

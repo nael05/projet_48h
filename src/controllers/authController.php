@@ -3,7 +3,7 @@ namespace App\Controllers;
 
 class AuthController {
 
-    private const FEED_PATH = '/feed.php';
+    private const FEED_PATH = '/feed';
 
     private function isAuthenticated(): bool {
         return !empty($_SESSION['user_id']) || !empty($_SESSION['is_authenticated']);
@@ -37,7 +37,12 @@ class AuthController {
                 $stmt->execute(['email' => $email]);
                 $user = $stmt->fetch();
 
-                if (!$user || !password_verify($password, (string) $user['password'])) {
+                if (!$user) {
+                    $this->renderLogin('Aucun compte n\'existe avec cet email.', $oldInput);
+                    return;
+                }
+
+                if (!password_verify($password, (string) $user['password'])) {
                     $this->renderLogin('Email ou mot de passe incorrect.', $oldInput);
                     return;
                 }
@@ -123,11 +128,21 @@ class AuthController {
                     'password' => $passwordHash,
                 ]);
 
+                $freshUserStmt = $pdo->prepare('SELECT id, username, email FROM users WHERE email = :email LIMIT 1');
+                $freshUserStmt->execute(['email' => $email]);
+                $freshUser = $freshUserStmt->fetch();
+
+                if (!$freshUser) {
+                    $this->renderRegister("Inscription creee mais connexion automatique indisponible. Connectez-vous manuellement.", $oldInput);
+                    return;
+                }
+
                 $_SESSION['is_authenticated'] = true;
-                $_SESSION['user_id'] = (int) $pdo->lastInsertId();
-                $_SESSION['username'] = $username;
-                $_SESSION['email'] = $email;
+                $_SESSION['user_id'] = (int) $freshUser['id'];
+                $_SESSION['username'] = (string) $freshUser['username'];
+                $_SESSION['email'] = (string) $freshUser['email'];
                 session_regenerate_id(true);
+                session_write_close();
 
                 header('Location: ' . $this->buildUrl(self::FEED_PATH));
                 exit;
@@ -138,6 +153,21 @@ class AuthController {
         }
 
         $this->renderRegister();
+    }
+
+    public function logout(): void {
+        // Supprimer les données de session
+        $_SESSION['is_authenticated'] = null;
+        $_SESSION['user_id'] = null;
+        $_SESSION['username'] = null;
+        $_SESSION['email'] = null;
+        
+        // Détruire la session complètement
+        session_destroy();
+        
+        // Rediriger vers la page de connexion
+        header('Location: ' . $this->buildUrl('/login'));
+        exit;
     }
 
     private function renderLogin(?string $errorMessage = null, array $oldInput = []): void {

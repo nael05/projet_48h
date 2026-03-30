@@ -1,6 +1,8 @@
 <?php
 $activeNav = $activeNav ?? 'feed';
 $mockUrl = $mockUrl ?? 'localhost:3000/';
+$basePath = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/')), '/');
+$basePath = ($basePath === '/' || $basePath === '.') ? '' : $basePath;
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -15,7 +17,6 @@ $mockUrl = $mockUrl ?? 'localhost:3000/';
 
     :root {
       --dark:     #111827;
-      --orange:   #f59e0b;
       --gray-100: #f4f4f4;
       --gray-200: #e5e7eb;
       --gray-300: #d1d5db;
@@ -163,53 +164,6 @@ $mockUrl = $mockUrl ?? 'localhost:3000/';
     .btn-outline:hover { border-color: var(--dark); background: var(--gray-100); }
     .skel { background: var(--gray-200); border-radius: 4px; display: block; }
 
-    @media (max-width: 1024px) {
-      .header {
-        height: auto;
-        min-height: 60px;
-        flex-wrap: wrap;
-        row-gap: 10px;
-        padding: 10px 16px;
-      }
-
-      .header__logo {
-        margin-right: 0;
-        font-size: 20px;
-      }
-
-      .header__nav {
-        order: 3;
-        width: 100%;
-        margin-left: 0;
-        gap: 8px;
-        overflow-x: auto;
-        white-space: nowrap;
-        padding-bottom: 4px;
-      }
-
-      .header__nav-link {
-        display: inline-block;
-        padding: 6px 10px;
-        border-radius: 999px;
-        background: rgba(255, 255, 255, .06);
-      }
-
-      .header__nav-link.active {
-        background: rgba(255, 255, 255, .14);
-      }
-    }
-
-    @media (max-width: 640px) {
-      .header__bell,
-      .header__avatar {
-        display: none;
-      }
-
-      .header {
-        padding: 10px 12px;
-      }
-    }
-
   </style>
 </head>
 <body>
@@ -219,10 +173,11 @@ $mockUrl = $mockUrl ?? 'localhost:3000/';
     <div class="header__logo">ynovNet</div>
 
     <nav class="header__nav">
-      <a href="/feed"     class="header__nav-link <?= $activeNav==='feed'     ? 'active':'' ?>">Fil</a>
-      <a href="/profile"  class="header__nav-link <?= $activeNav==='profile'  ? 'active':'' ?>">Profil</a>
-      <a href="/messages" class="header__nav-link <?= $activeNav==='messages' ? 'active':'' ?>">Messages</a>
-      <a href="#"         class="header__nav-link">Ymatch</a>
+      <a href="<?= htmlspecialchars($basePath . '/feed', ENT_QUOTES, 'UTF-8') ?>"     class="header__nav-link <?= $activeNav==='feed'     ? 'active':'' ?>">Fil</a>
+      <a href="<?= htmlspecialchars($basePath . '/profile', ENT_QUOTES, 'UTF-8') ?>"  class="header__nav-link <?= $activeNav==='profile'  ? 'active':'' ?>">Profil</a>
+      <a href="<?= htmlspecialchars($basePath . '/messages', ENT_QUOTES, 'UTF-8') ?>" class="header__nav-link <?= $activeNav==='messages' ? 'active':'' ?>">Messages</a>
+      <a href="https://ymatch.ynov.com/login" target="_blank" class="header__nav-link">Ymatch</a>
+      <a href="<?= htmlspecialchars($basePath . '/logout', ENT_QUOTES, 'UTF-8') ?>"   class="header__nav-link">Déconnexion</a>
     </nav>
 
     <div class="header__bell">

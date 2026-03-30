@@ -28,6 +28,7 @@ use App\Core\Router;
 $router = new Router();
 $router->add('/login', 'AuthController', 'login');
 $router->add('/register', 'AuthController', 'register');
+$router->add('/logout', 'AuthController', 'logout');
 
 $router->add('/feed', 'FeedController', 'index');
 $router->add('/feed.php', 'FeedController', 'index');

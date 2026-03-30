@@ -1,55 +1,8 @@
-  <style>
-    @media (max-width: 1100px) {
-      .messages-shell {
-        flex-direction: column !important;
-      }
-
-      .messages-sidebar {
-        width: 100% !important;
-        border-right: none !important;
-        border-bottom: 1px solid rgba(0, 0, 0, .1);
-      }
-    }
-
-    @media (max-width: 768px) {
-      .messages-page {
-        padding: 12px !important;
-      }
-
-      .messages-shell {
-        border-radius: 12px !important;
-      }
-
-      .conversation-header {
-        flex-direction: column !important;
-        align-items: flex-start !important;
-        gap: 10px;
-      }
-
-      .conversation-header .btn-outline {
-        width: 100%;
-        justify-content: center;
-      }
-
-      .composer-row {
-        flex-wrap: wrap;
-      }
-
-      .composer-row input {
-        min-width: 100%;
-      }
-
-      .messages-conversation [style*="max-width:60%"] {
-        max-width: 85% !important;
-      }
-    }
-  </style>
-
-  <div class="messages-page" style="flex:1; padding:24px; display:flex; flex-direction:column; align-items:center;">
-    <div class="messages-shell" style="width:100%; max-width:1200px; flex:1; display:flex; background:var(--container-gradient); backdrop-filter:blur(12px); border-radius:16px; overflow:hidden; box-shadow:0 12px 40px rgba(0,0,0,0.15); border:1px solid rgba(255,255,255,0.4);">
+  <div style="flex:1; padding:24px; display:flex; flex-direction:column; align-items:center;">
+    <div style="width:100%; max-width:1200px; flex:1; display:flex; background:var(--container-gradient); backdrop-filter:blur(12px); border-radius:16px; overflow:hidden; box-shadow:0 12px 40px rgba(0,0,0,0.15); border:1px solid rgba(255,255,255,0.4);">
 
     <!-- ══ CONTACTS (gauche) ══ -->
-    <div class="messages-sidebar" style="width:320px;flex-shrink:0;border-right:1px solid rgba(0,0,0,0.1);display:flex;flex-direction:column;background:transparent;">
+    <div style="width:320px;flex-shrink:0;border-right:1px solid rgba(0,0,0,0.1);display:flex;flex-direction:column;background:transparent;">
 
       <!-- Search -->
       <div style="padding:16px;border-bottom:1px solid #e5e7eb;">
@@ -100,10 +53,10 @@
     </div>
 
     <!-- ══ CONVERSATION (droite) ══ -->
-    <div class="messages-conversation" style="flex:1;display:flex;flex-direction:column;background:rgba(255,255,255,0.4);">
+    <div style="flex:1;display:flex;flex-direction:column;background:rgba(255,255,255,0.4);">
 
       <!-- Header conv -->
-      <div class="conversation-header" style="background:#fff;border-bottom:1px solid #e5e7eb;padding:14px 20px;display:flex;justify-content:space-between;align-items:center;">
+      <div style="background:#fff;border-bottom:1px solid #e5e7eb;padding:14px 20px;display:flex;justify-content:space-between;align-items:center;">
         <div style="display:flex;align-items:center;gap:12px;">
           <div style="width:40px;height:40px;border-radius:50%;background:#d1d5db;"></div>
           <div>
@@ -149,7 +102,7 @@
 
       <!-- Input -->
       <div style="background:transparent;border-top:1px solid rgba(0,0,0,0.1);padding:14px 20px;">
-        <div class="composer-row" style="display:flex;align-items:center;gap:10px;">
+        <div style="display:flex;align-items:center;gap:10px;">
           <button style="width:36px;height:36px;border:1.5px solid #e5e7eb;border-radius:6px;background:#f9fafb;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:border-color .2s;" onmouseenter="this.style.borderColor='#374151'" onmouseleave="this.style.borderColor='#e5e7eb'">
             <svg width="16" height="16" fill="none" stroke="#6b7280" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66l-9.2 9.19a2 2 0 01-2.83-2.83l8.49-8.48"/></svg>
           </button>
