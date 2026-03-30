@@ -105,10 +105,6 @@ $basePath = ($basePath === '/' || $basePath === '.') ? '' : $basePath;
             Inscription
           </a>
 
-          <div style="text-align:center;">
-            <span class="badge-api">POST /auth/login — bcrypt.compare()</span>
-          </div>
-
         </form>
       </div>
 

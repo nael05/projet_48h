@@ -4,6 +4,36 @@ namespace App\Controllers;
 class AuthController {
 
     private const FEED_PATH = '/feed';
+    private const ALLOWED_FILIERES = [
+        'Informatique',
+        'Cybersécurité',
+        'IA & Data',
+        '3D, Animation & Jeux Vidéo',
+        'Création & Design',
+        'Marketing & Communication',
+        'Audiovisuel',
+        "Architecture d'Intérieur",
+        'Bâtiment Numérique',
+        'Digital & IA',
+    ];
+    private const ALLOWED_CAMPUSES = [
+        'Aix-en-Provence',
+        'Bordeaux',
+        'Casablanca',
+        'Lille',
+        'Lyon',
+        'Montpellier',
+        'Nantes',
+        'Nice Sophia Antipolis',
+        'Paris Est',
+        'Paris Ouest',
+        'Rennes',
+        'Rouen',
+        'Strasbourg',
+        'Toulouse',
+        'Ynov Connect',
+    ];
+    private const ALLOWED_PROMOTIONS = ['B1', 'B2', 'B3', 'M1', 'M2'];
 
     private function isAuthenticated(): bool {
         return !empty($_SESSION['user_id']) || !empty($_SESSION['is_authenticated']);
@@ -75,16 +105,35 @@ class AuthController {
             $fullName = trim($_POST['name'] ?? '');
             $email = strtolower(trim($_POST['email'] ?? ''));
             $filiere = trim($_POST['filiere'] ?? '');
+            $campus = trim($_POST['campus'] ?? '');
+            $promotion = trim($_POST['promotion'] ?? '');
             $password = (string) ($_POST['password'] ?? '');
 
             $oldInput = [
                 'name' => $fullName,
                 'email' => $email,
                 'filiere' => $filiere,
+                'campus' => $campus,
+                'promotion' => $promotion,
             ];
 
-            if ($fullName === '' || $email === '' || $password === '') {
+            if ($fullName === '' || $email === '' || $password === '' || $filiere === '' || $campus === '' || $promotion === '') {
                 $this->renderRegister('Merci de remplir tous les champs obligatoires.', $oldInput);
+                return;
+            }
+
+            if (!in_array($filiere, self::ALLOWED_FILIERES, true)) {
+                $this->renderRegister('Filiere invalide. Merci de choisir une filiere proposee.', $oldInput);
+                return;
+            }
+
+            if (!in_array($campus, self::ALLOWED_CAMPUSES, true)) {
+                $this->renderRegister('Campus invalide. Merci de choisir un campus propose.', $oldInput);
+                return;
+            }
+
+            if (!in_array($promotion, self::ALLOWED_PROMOTIONS, true)) {
+                $this->renderRegister('Promotion invalide. Merci de choisir une promotion proposee.', $oldInput);
                 return;
             }
 
@@ -100,6 +149,7 @@ class AuthController {
 
             try {
                 $pdo = $this->getPdo();
+                $this->ensureUsersAcademicColumns($pdo);
 
                 $checkStmt = $pdo->prepare('SELECT id FROM users WHERE email = :email LIMIT 1');
                 $checkStmt->execute(['email' => $email]);
@@ -116,8 +166,8 @@ class AuthController {
                 $passwordHash = password_hash($password, PASSWORD_BCRYPT);
 
                 $insertStmt = $pdo->prepare(
-                    'INSERT INTO users (username, nom, prenom, formation, email, password)
-                     VALUES (:username, :nom, :prenom, :formation, :email, :password)'
+                    'INSERT INTO users (username, nom, prenom, formation, campus, promotion, email, password)
+                     VALUES (:username, :nom, :prenom, :formation, :campus, :promotion, :email, :password)'
                 );
 
                 $insertStmt->execute([
@@ -125,6 +175,8 @@ class AuthController {
                     'nom' => $nom,
                     'prenom' => $prenom,
                     'formation' => $filiere !== '' ? $filiere : null,
+                    'campus' => $campus,
+                    'promotion' => $promotion,
                     'email' => $email,
                     'password' => $passwordHash,
                 ]);
@@ -239,5 +291,19 @@ class AuthController {
         $basePath = ($basePath === '/' || $basePath === '.') ? '' : $basePath;
 
         return $basePath . $path;
+    }
+
+    private function ensureUsersAcademicColumns(\PDO $pdo): void {
+        $stmt = $pdo->query("SHOW COLUMNS FROM users LIKE 'campus'");
+        $campusExists = $stmt->fetch();
+        if (!$campusExists) {
+            $pdo->exec('ALTER TABLE users ADD COLUMN campus VARCHAR(100) NULL AFTER formation');
+        }
+
+        $stmt = $pdo->query("SHOW COLUMNS FROM users LIKE 'promotion'");
+        $promotionExists = $stmt->fetch();
+        if (!$promotionExists) {
+            $pdo->exec('ALTER TABLE users ADD COLUMN promotion VARCHAR(10) NULL AFTER campus');
+        }
     }
 }

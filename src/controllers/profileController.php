@@ -114,6 +114,8 @@ class ProfileController {
 
         $profileFullName = (string) ($_SESSION['username'] ?? 'Utilisateur');
         $profileFormation = 'Profil Ynov';
+        $profileCampus = '';
+        $profilePromotion = '';
         $profileBio = '';
         $profilePicture = '';
         $profileBanner = '';
@@ -131,8 +133,9 @@ class ProfileController {
             $pdo = $this->getPdo();
             $this->ensurePostsImageColumn($pdo);
             $this->ensureUsersBannerColumn($pdo);
+            $this->ensureUsersAcademicColumns($pdo);
 
-            $stmt = $pdo->prepare('SELECT nom, prenom, formation, bio, profile_picture, banner_picture FROM users WHERE id = :id LIMIT 1');
+            $stmt = $pdo->prepare('SELECT nom, prenom, formation, campus, promotion, bio, profile_picture, banner_picture FROM users WHERE id = :id LIMIT 1');
             $stmt->execute(['id' => $userId]);
             $user = $stmt->fetch();
 
@@ -154,6 +157,9 @@ class ProfileController {
             if ($formation !== '') {
                 $profileFormation = $formation;
             }
+
+            $profileCampus = trim((string) ($user['campus'] ?? ''));
+            $profilePromotion = trim((string) ($user['promotion'] ?? ''));
 
             $profileBio = trim((string) ($user['bio'] ?? ''));
             $profilePicture = (string) ($user['profile_picture'] ?? '');
@@ -245,6 +251,20 @@ class ProfileController {
 
         if (!$exists) {
             $pdo->exec('ALTER TABLE users ADD COLUMN banner_picture VARCHAR(255) NULL AFTER profile_picture');
+        }
+    }
+
+    private function ensureUsersAcademicColumns(\PDO $pdo): void {
+        $stmt = $pdo->query("SHOW COLUMNS FROM users LIKE 'campus'");
+        $campusExists = $stmt->fetch();
+        if (!$campusExists) {
+            $pdo->exec('ALTER TABLE users ADD COLUMN campus VARCHAR(100) NULL AFTER formation');
+        }
+
+        $stmt = $pdo->query("SHOW COLUMNS FROM users LIKE 'promotion'");
+        $promotionExists = $stmt->fetch();
+        if (!$promotionExists) {
+            $pdo->exec('ALTER TABLE users ADD COLUMN promotion VARCHAR(10) NULL AFTER campus');
         }
     }
 

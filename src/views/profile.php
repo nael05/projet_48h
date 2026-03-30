@@ -46,6 +46,20 @@
               <div>
                 <h1 style="font-family:'Montserrat',sans-serif;font-size:20px;font-weight:800;color:#111827;margin-bottom:3px;"><?= htmlspecialchars($profileFullName ?? 'Utilisateur', ENT_QUOTES, 'UTF-8') ?></h1>
                 <p style="font-size:13px;color:#6b7280;font-weight:500;"><?= htmlspecialchars($profileFormation ?? 'Profil Ynov', ENT_QUOTES, 'UTF-8') ?></p>
+                <?php if (!empty($profileCampus) || !empty($profilePromotion)): ?>
+                <div style="display:flex;flex-wrap:wrap;gap:7px;margin-top:9px;">
+                  <?php if (!empty($profileCampus)): ?>
+                  <span style="padding:4px 10px;border-radius:99px;border:1px solid #d1d5db;background:#f9fafb;font-size:12px;color:#374151;font-weight:600;">
+                    Campus: <?= htmlspecialchars((string) $profileCampus, ENT_QUOTES, 'UTF-8') ?>
+                  </span>
+                  <?php endif; ?>
+                  <?php if (!empty($profilePromotion)): ?>
+                  <span style="padding:4px 10px;border-radius:99px;border:1px solid #d1d5db;background:#f9fafb;font-size:12px;color:#374151;font-weight:600;">
+                    Promotion: <?= htmlspecialchars((string) $profilePromotion, ENT_QUOTES, 'UTF-8') ?>
+                  </span>
+                  <?php endif; ?>
+                </div>
+                <?php endif; ?>
               </div>
               <div style="display:flex;gap:8px;">
                 <button class="btn-dark" style="flex:1;">Envoyer message</button>
@@ -103,9 +117,6 @@
                   <div style="height:9px;background:#bfdbfe;border-radius:4px;width:75%;"></div>
                 </div>
                 <button class="btn-dark" style="width:100%;margin-bottom:8px;">Générer résumé (IA)</button>
-                <div style="margin-top:10px;padding-top:10px;border-top:1px dashed var(--gray-400);">
-                  <span class="badge-api">POST /ai/summarize — Gemini</span>
-                </div>
               </div>
             </div> <!-- FERMETURE COLONNE GAUCHE MANQUANTE -->
 

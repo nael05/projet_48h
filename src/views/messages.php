@@ -81,9 +81,7 @@ if (!empty($conversationMessages)) {
         <?php endif; ?>
       </div>
 
-      <div style="padding:12px 16px;border-top:1px dashed var(--gray-400);">
-        <span class="badge-api">GET /messages/poll every 2s</span>
-      </div>
+      <div style="padding:12px 16px;border-top:1px dashed var(--gray-400);"></div>
     </div>
 
     <div style="flex:1;display:flex;flex-direction:column;background:rgba(255,255,255,0.4);">
@@ -233,9 +231,7 @@ if (!empty($conversationMessages)) {
               onfocus="this.style.borderColor='#374151'" onblur="this.style.borderColor='#e5e7eb'">
             <button class="btn-dark" style="flex-shrink:0;" type="submit">Envoyer</button>
           </form>
-          <div style="margin-top:10px;">
-            <span class="badge-api">POST /messages/send + GET /messages/poll</span>
-          </div>
+          <div style="margin-top:10px;"></div>
         </div>
       <?php endif; ?>
     </div>

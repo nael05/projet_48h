@@ -19,6 +19,8 @@ CREATE TABLE users (
   nom VARCHAR(50) NOT NULL,
   prenom VARCHAR(50) NOT NULL,
   formation VARCHAR(100),
+  campus VARCHAR(100),
+  promotion VARCHAR(10),
   profile_picture VARCHAR(255),
   banner_picture VARCHAR(255),
   email VARCHAR(100) NOT NULL UNIQUE,

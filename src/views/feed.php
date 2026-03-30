@@ -73,9 +73,6 @@
               </div>
             </div>
           </form>
-          <div style="margin-top:14px;padding-top:12px;border-top:1px dashed var(--gray-400);">
-            <span class="badge-api">POST /posts + image</span>
-          </div>
         </div>
 
         <!-- Fil d'actualité -->
@@ -249,9 +246,6 @@
         <!-- Charger plus -->
         <div style="text-align:center;padding:4px 0 12px;">
           <button class="btn-outline" style="padding:10px 32px;font-size:13px;">Charger plus...</button>
-          <div style="margin-top:14px;padding-top:10px;border-top:1px dashed var(--gray-400);text-align:left;">
-            <span class="badge-api">GET /feed — pagination cursor</span>
-          </div>
         </div>
       </div>
 
@@ -270,9 +264,6 @@
             </div>
             <?php endforeach; ?>
           </div>
-          <div style="margin-top:10px;padding-top:10px;border-top:1px dashed var(--gray-400);">
-            <span class="badge-api">GET /news — NewsModel</span>
-          </div>
         </div>
 
         <!-- Ymatch -->
@@ -284,9 +275,6 @@
             </div>
             <p style="font-size:12px;color:#6b7280;margin-bottom:14px;">Trouve ton prochain projet ou stage 🎯</p>
             <button class="btn-dark" style="width:100%;">Voir les offres +</button>
-          </div>
-          <div style="margin-top:10px;padding-top:10px;border-top:1px dashed var(--gray-400);">
-            <span class="badge-api">GET /ymatch — offres</span>
           </div>
         </div>
 

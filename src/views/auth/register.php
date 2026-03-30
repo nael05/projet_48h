@@ -13,12 +13,13 @@ $basePath = ($basePath === '/' || $basePath === '.') ? '' : $basePath;
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     body { 
       font-family: 'Roboto', sans-serif; 
-      display: flex; height: 100vh; align-items: center; justify-content: center;
+      display: flex; min-height: 100vh; align-items: center; justify-content: center;
       background: linear-gradient(145deg, #16363c 0%, #2f2050 45%, #591b35 100%); 
-      overflow: hidden; 
+      overflow: auto;
+      padding: 20px;
     }
     .auth-container {
-      display: flex; flex-direction: row; width: 100%; max-width: 900px; height: 580px;
+      display: flex; flex-direction: row; width: 100%; max-width: 940px; min-height: 640px;
       background: linear-gradient(135deg, rgba(220,245,240,0.95) 0%, rgba(235,230,250,0.95) 100%);
       backdrop-filter: blur(12px); border-radius: 20px; box-shadow: 0 24px 60px rgba(0,0,0,0.3);
       overflow: hidden; border: 1px solid rgba(255,255,255,0.4);
@@ -80,7 +81,7 @@ $basePath = ($basePath === '/' || $basePath === '.') ? '' : $basePath;
     </div>
 
     <!-- PANNEAU DROIT (Formulaire) -->
-    <div style="flex:5; display:flex; align-items:center; justify-content:center; padding:40px; background: rgba(255,255,255,0.6);">
+    <div style="flex:5; display:flex; align-items:center; justify-content:center; padding:40px; background: rgba(255,255,255,0.6); overflow-y:auto;">
       
       <div style="width:100%; max-width:340px; display:flex; flex-direction:column; align-items:center;">
         
@@ -88,11 +89,83 @@ $basePath = ($basePath === '/' || $basePath === '.') ? '' : $basePath;
           Inscription
         </h1>
 
+        <?php
+          $oldName = (string) ($oldInput['name'] ?? '');
+          $oldEmail = (string) ($oldInput['email'] ?? '');
+          $oldFiliere = (string) ($oldInput['filiere'] ?? '');
+          $oldCampus = (string) ($oldInput['campus'] ?? '');
+          $oldPromotion = (string) ($oldInput['promotion'] ?? '');
+
+          $filieres = [
+            'Informatique',
+            'Cybersécurité',
+            'IA & Data',
+            '3D, Animation & Jeux Vidéo',
+            'Création & Design',
+            'Marketing & Communication',
+            'Audiovisuel',
+            "Architecture d'Intérieur",
+            'Bâtiment Numérique',
+            'Digital & IA',
+          ];
+          $campuses = [
+            'Aix-en-Provence',
+            'Bordeaux',
+            'Casablanca',
+            'Lille',
+            'Lyon',
+            'Montpellier',
+            'Nantes',
+            'Nice Sophia Antipolis',
+            'Paris Est',
+            'Paris Ouest',
+            'Rennes',
+            'Rouen',
+            'Strasbourg',
+            'Toulouse',
+            'Ynov Connect',
+          ];
+          $promotions = ['B1', 'B2', 'B3', 'M1', 'M2'];
+        ?>
+
+        <?php if (!empty($errorMessage)): ?>
+        <div style="width:100%; margin-bottom:14px; padding:10px 12px; background:#fee2e2; border:1px solid #fca5a5; color:#991b1b; border-radius:10px; font-size:12.5px;">
+          <?= htmlspecialchars((string) $errorMessage, ENT_QUOTES, 'UTF-8') ?>
+        </div>
+        <?php endif; ?>
+
         <form action="<?= htmlspecialchars($basePath . '/register', ENT_QUOTES, 'UTF-8') ?>" method="POST" style="width:100%;">
           
-          <input type="text" name="name" class="input-field" placeholder="Prénom et Nom" required>
-          <input type="email" name="email" class="input-field" placeholder="prenom.nom@ynov.com" required>
-          <input type="text" name="filiere" class="input-field" placeholder="Filière (ex: B2 Informatique)" required>
+          <input type="text" name="name" class="input-field" placeholder="Prénom et Nom" value="<?= htmlspecialchars($oldName, ENT_QUOTES, 'UTF-8') ?>" required>
+          <input type="email" name="email" class="input-field" placeholder="prenom.nom@ynov.com" value="<?= htmlspecialchars($oldEmail, ENT_QUOTES, 'UTF-8') ?>" required>
+
+          <select name="filiere" class="input-field" required>
+            <option value="">Sélectionner une filière</option>
+            <?php foreach ($filieres as $filiere): ?>
+            <option value="<?= htmlspecialchars($filiere, ENT_QUOTES, 'UTF-8') ?>" <?= $oldFiliere === $filiere ? 'selected' : '' ?>>
+              <?= htmlspecialchars($filiere, ENT_QUOTES, 'UTF-8') ?>
+            </option>
+            <?php endforeach; ?>
+          </select>
+
+          <select name="campus" class="input-field" required>
+            <option value="">Sélectionner un campus</option>
+            <?php foreach ($campuses as $campus): ?>
+            <option value="<?= htmlspecialchars($campus, ENT_QUOTES, 'UTF-8') ?>" <?= $oldCampus === $campus ? 'selected' : '' ?>>
+              <?= htmlspecialchars($campus, ENT_QUOTES, 'UTF-8') ?>
+            </option>
+            <?php endforeach; ?>
+          </select>
+
+          <select name="promotion" class="input-field" required>
+            <option value="">Sélectionner une promotion</option>
+            <?php foreach ($promotions as $promotion): ?>
+            <option value="<?= htmlspecialchars($promotion, ENT_QUOTES, 'UTF-8') ?>" <?= $oldPromotion === $promotion ? 'selected' : '' ?>>
+              <?= htmlspecialchars($promotion, ENT_QUOTES, 'UTF-8') ?>
+            </option>
+            <?php endforeach; ?>
+          </select>
+
           <input type="password" name="password" class="input-field" placeholder="••••••••" style="margin-bottom:24px;" required>
 
           <button type="submit" class="btn-solid">
@@ -102,10 +175,6 @@ $basePath = ($basePath === '/' || $basePath === '.') ? '' : $basePath;
           <a href="<?= htmlspecialchars($basePath . '/login', ENT_QUOTES, 'UTF-8') ?>" class="btn-outline">
             Connexion
           </a>
-
-          <div style="text-align:center;">
-            <span class="badge-api">POST /auth/register — bcrypt.hash()</span>
-          </div>
 
         </form>
       </div>
