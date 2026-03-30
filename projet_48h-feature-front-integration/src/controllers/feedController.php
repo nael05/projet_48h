@@ -1,14 +1,14 @@
 <?php
 namespace App\Controllers;
 
-class MessageController {
+class FeedController {
     public function index() {
-        $activeTab = 'messages';
-        $activeNav = 'messages';
-        $mockUrl = 'localhost:3000/messages';
+        $activeTab = 'feed';
+        $activeNav = 'feed';
+        $mockUrl = 'localhost:3000/feed';
         
         require_once __DIR__ . '/../Views/layout/header.php';
-        require_once __DIR__ . '/../Views/messages.php';
+        require_once __DIR__ . '/../Views/feed.php';
         require_once __DIR__ . '/../Views/layout/footer.php';
     }
 }

@@ -1,8 +1,4 @@
 <!DOCTYPE html>
-<?php
-$basePath = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/')), '/');
-$basePath = ($basePath === '/' || $basePath === '.') ? '' : $basePath;
-?>
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
@@ -47,64 +43,13 @@ $basePath = ($basePath === '/' || $basePath === '.') ? '' : $basePath;
       display: inline-flex; font-family: 'SFMono-Regular', monospace; font-size: 11px; 
       color: #fff; background: #4b5563; border-radius: 4px; padding: 4px 10px;
     }
-
-    @media (max-width: 900px) {
-      body {
-        height: auto;
-        min-height: 100vh;
-        overflow: auto;
-        padding: 16px;
-      }
-
-      .auth-container {
-        flex-direction: column;
-        height: auto;
-        max-width: 640px;
-      }
-
-      .auth-left,
-      .auth-right {
-        width: 100% !important;
-        flex: none !important;
-        padding: 24px !important;
-      }
-
-      .auth-left {
-        min-height: 220px;
-        border-right: none !important;
-        border-bottom: 1px solid rgba(0,0,0,.08);
-      }
-
-      .auth-title {
-        margin-bottom: 24px !important;
-      }
-    }
-
-    @media (max-width: 520px) {
-      body {
-        padding: 10px;
-      }
-
-      .auth-left,
-      .auth-right {
-        padding: 18px !important;
-      }
-
-      .auth-logo {
-        font-size: 32px !important;
-      }
-
-      .auth-title {
-        font-size: 24px !important;
-      }
-    }
   </style>
 </head>
 <body>
 
   <div class="auth-container">
     <!-- PANNEAU GAUCHE -->
-    <div class="auth-left" style="flex:4; background:linear-gradient(145deg, rgba(42,90,87,0.4) 0%, rgba(60,46,112,0.4) 50%, rgba(110,36,63,0.4) 100%); display:flex; flex-direction:column; align-items:center; justify-content:center; padding:40px; color:white; position:relative; border-right: 1px solid rgba(0,0,0,0.05);">
+    <div style="flex:4; background:linear-gradient(145deg, rgba(42,90,87,0.4) 0%, rgba(60,46,112,0.4) 50%, rgba(110,36,63,0.4) 100%); display:flex; flex-direction:column; align-items:center; justify-content:center; padding:40px; color:white; position:relative; border-right: 1px solid rgba(0,0,0,0.05);">
       
       <div style="display:flex; align-items:center; gap:12px; margin-bottom:24px; position:relative; z-index:10;">
         <svg viewBox="0 0 100 100" width="46" height="46" style="flex-shrink:0">
@@ -122,7 +67,7 @@ $basePath = ($basePath === '/' || $basePath === '.') ? '' : $basePath;
           <line x1="26" y1="74" x2="72" y2="28" stroke="url(#pg_arr)" stroke-width="11" stroke-linecap="round"/>
           <polygon points="61,24 76,23 75,38" fill="#6bcfa8"/>
         </svg>
-        <span class="auth-logo" style="font-family:'Montserrat', sans-serif; font-weight:800; font-size:42px; letter-spacing:-.03em; color:#111827;">ynovNet</span>
+        <span style="font-family:'Montserrat', sans-serif; font-weight:800; font-size:42px; letter-spacing:-.03em; color:#111827;">ynovNet</span>
       </div>
 
       <p style="text-align:center; font-size:18px; font-weight:500; line-height:1.4; color:#374151; position:relative; z-index:10;">
@@ -131,15 +76,15 @@ $basePath = ($basePath === '/' || $basePath === '.') ? '' : $basePath;
     </div>
 
     <!-- PANNEAU DROIT (Formulaire) -->
-    <div class="auth-right" style="flex:5; display:flex; align-items:center; justify-content:center; padding:40px; background: rgba(255,255,255,0.6);">
+    <div style="flex:5; display:flex; align-items:center; justify-content:center; padding:40px; background: rgba(255,255,255,0.6);">
       
       <div style="width:100%; max-width:340px; display:flex; flex-direction:column; align-items:center;">
         
-        <h1 class="auth-title" style="font-family:'Montserrat',sans-serif; font-weight:800; font-size:26px; color:#111827; margin-bottom:34px;">
+        <h1 style="font-family:'Montserrat',sans-serif; font-weight:800; font-size:26px; color:#111827; margin-bottom:34px;">
           Inscription
         </h1>
 
-        <form action="<?= htmlspecialchars($basePath . '/register', ENT_QUOTES, 'UTF-8') ?>" method="POST" style="width:100%;">
+        <form action="/register" method="POST" style="width:100%;">
           
           <input type="text" name="name" class="input-field" placeholder="Prénom et Nom" required>
           <input type="email" name="email" class="input-field" placeholder="prenom.nom@ynov.com" required>
@@ -150,7 +95,7 @@ $basePath = ($basePath === '/' || $basePath === '.') ? '' : $basePath;
             Créer mon compte
           </button>
 
-          <a href="<?= htmlspecialchars($basePath . '/login', ENT_QUOTES, 'UTF-8') ?>" class="btn-outline">
+          <a href="/login" class="btn-outline">
             Connexion
           </a>
 

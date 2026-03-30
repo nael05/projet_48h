@@ -1,64 +1,21 @@
-  <style>
-    @media (max-width: 1100px) {
-      .feed-main {
-        grid-template-columns: 1fr !important;
-      }
-    }
-
-    @media (max-width: 768px) {
-      .feed-page {
-        padding: 12px !important;
-      }
-
-      .feed-main {
-        padding: 14px !important;
-        border-radius: 12px !important;
-        gap: 14px !important;
-      }
-
-      .composer-row {
-        flex-direction: column !important;
-      }
-
-      .composer-actions {
-        flex-wrap: wrap !important;
-      }
-
-      .composer-actions .btn-dark {
-        width: 100%;
-        margin-left: 0 !important;
-      }
-
-      .post-actions {
-        flex-wrap: wrap;
-      }
-
-      .post-actions .btn-outline {
-        width: 100%;
-        justify-content: center;
-        margin-left: 0 !important;
-      }
-    }
-  </style>
-
-  <div class="feed-page" style="flex:1; padding:24px;">
-    <main class="feed-main" style="max-width:1200px;margin:0 auto;padding:28px;background:var(--container-gradient);backdrop-filter:blur(10px);border-radius:16px;box-shadow:0 12px 40px rgba(0,0,0,0.15);display:grid;grid-template-columns:1fr 360px;gap:24px;">
+  <div style="flex:1; padding:24px;">
+    <main style="max-width:1200px;margin:0 auto;padding:28px;background:var(--container-gradient);backdrop-filter:blur(10px);border-radius:16px;box-shadow:0 12px 40px rgba(0,0,0,0.15);display:grid;grid-template-columns:1fr 360px;gap:24px;">
 
       <!-- ══ COLONNE GAUCHE ══ -->
-      <div class="feed-left" style="display:flex;flex-direction:column;gap:20px;">
+      <div style="display:flex;flex-direction:column;gap:20px;">
 
         <!-- Publier -->
         <div class="section-header">
           <h2>Publier</h2><span class="sep"></span>
         </div>
         <div class="card" style="padding:20px;">
-          <div class="composer-row" style="display:flex;gap:14px;">
+          <div style="display:flex;gap:14px;">
             <div style="width:46px;height:46px;border-radius:50%;background:#d1d5db;flex-shrink:0;"></div>
             <div style="flex:1;">
               <textarea rows="3" placeholder="Quoi de neuf sur le campus ?"
                 style="width:100%;background:#f9fafb;border:1.5px solid #e5e7eb;border-radius:6px;padding:12px;font-family:'Roboto',sans-serif;font-size:13.5px;color:#374151;resize:none;outline:none;transition:border-color .2s;"
                 onfocus="this.style.borderColor='#374151'" onblur="this.style.borderColor='#e5e7eb'"></textarea>
-              <div class="composer-actions" style="margin-top:10px;display:flex;align-items:center;gap:8px;">
+              <div style="margin-top:10px;display:flex;align-items:center;gap:8px;">
                 <button class="btn-outline">
                   <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
                   + Image
@@ -98,7 +55,7 @@
             <span style="padding:3px 12px;border-radius:99px;border:1px solid #d1d5db;font-size:11.5px;color:#374151;background:#f9fafb;font-weight:600;">React</span>
             <span style="padding:3px 12px;border-radius:99px;border:1px solid #d1d5db;font-size:11.5px;color:#374151;background:#f9fafb;font-weight:600;">Frontend</span>
           </div>
-          <div class="post-actions" style="display:flex;gap:8px;padding-top:12px;border-top:1px solid #f3f4f6;">
+          <div style="display:flex;gap:8px;padding-top:12px;border-top:1px solid #f3f4f6;">
             <button class="btn-secondary"><span style="font-size:14px;">👍</span> Like</button>
             <button class="btn-secondary"><span style="font-size:14px;">💬</span> Commenter</button>
             <button class="btn-outline" style="margin-left:auto;">Envoyer msg →</button>
@@ -115,7 +72,7 @@
             <span style="font-size:11.5px;color:#9ca3af;font-weight:500;">il y a 1h</span>
           </div>
           <div style="margin-bottom:14px;"><div class="skel" style="width:100%;height:10px;margin-bottom:7px;"></div><div class="skel" style="width:70%;height:10px;margin-bottom:7px;"></div><div class="skel" style="width:55%;height:10px;"></div></div>
-          <div class="post-actions" style="display:flex;gap:8px;padding-top:12px;border-top:1px solid #f3f4f6;">
+          <div style="display:flex;gap:8px;padding-top:12px;border-top:1px solid #f3f4f6;">
             <button class="btn-secondary"><span style="font-size:14px;">👍</span> Like</button>
             <button class="btn-secondary"><span style="font-size:14px;">💬</span> Commenter</button>
           </div>
@@ -131,7 +88,7 @@
       </div>
 
       <!-- ══ COLONNE DROITE ══ -->
-      <div class="feed-right" style="display:flex;flex-direction:column;gap:22px;">
+      <div style="display:flex;flex-direction:column;gap:22px;">
 
         <!-- News Ynov -->
         <div>

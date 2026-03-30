@@ -1,59 +1,15 @@
-  <style>
-    @media (max-width: 1100px) {
-      .profile-grid {
-        grid-template-columns: 1fr !important;
-        gap: 20px !important;
-      }
-    }
-
-    @media (max-width: 768px) {
-      .profile-page {
-        padding: 12px !important;
-      }
-
-      .profile-shell {
-        border-radius: 12px !important;
-      }
-
-      .profile-content {
-        padding: 0 16px 20px !important;
-      }
-
-      .profile-actions,
-      .profile-filters {
-        flex-wrap: wrap;
-      }
-
-      .profile-actions .btn-dark,
-      .profile-filters .btn-dark,
-      .profile-filters .btn-outline {
-        width: 100%;
-      }
-
-      .profile-stats {
-        grid-template-columns: repeat(2, 1fr) !important;
-      }
-    }
-
-    @media (max-width: 520px) {
-      .profile-stats {
-        grid-template-columns: 1fr !important;
-      }
-    }
-  </style>
-
-  <div class="profile-page" style="flex:1; padding:24px 28px;">
+  <div style="flex:1; padding:24px 28px;">
     <div style="max-width:1200px;margin:0 auto;">
 
       <!-- Bannière + Avatar -->
-      <div class="card profile-shell" style="overflow:hidden;margin-bottom:24px;background:var(--container-gradient);backdrop-filter:blur(12px);border-radius:16px;box-shadow:0 12px 40px rgba(0,0,0,0.15);border:1px solid rgba(255,255,255,0.4);">
+      <div class="card" style="overflow:hidden;margin-bottom:24px;background:var(--container-gradient);backdrop-filter:blur(12px);border-radius:16px;box-shadow:0 12px 40px rgba(0,0,0,0.15);border:1px solid rgba(255,255,255,0.4);">
         <div style="height:200px;background:rgba(255,255,255,0.5);display:flex;align-items:center;justify-content:center;border-bottom:1px solid rgba(0,0,0,0.1);">
           <span style="font-family:'SFMono-Regular',monospace;font-size:13px;color:#9ca3af;letter-spacing:.05em;">[ bannière de profil ]</span>
         </div>
-        <div class="profile-content" style="padding:0 28px 28px;position:relative;">
+        <div style="padding:0 28px 28px;position:relative;">
           <div style="width:88px;height:88px;border-radius:50%;background:#d1d5db;border:4px solid #fff;margin-top:-44px;margin-bottom:14px;box-shadow:0 1px 6px rgba(0,0,0,.12);"></div>
 
-          <div class="profile-grid" style="display:grid;grid-template-columns:280px 1fr;gap:32px;align-items:start;">
+          <div style="display:grid;grid-template-columns:280px 1fr;gap:32px;align-items:start;">
 
             <!-- Gauche : infos profil -->
             <div style="display:flex;flex-direction:column;gap:18px;">
@@ -61,7 +17,7 @@
                 <h1 style="font-family:'Montserrat',sans-serif;font-size:20px;font-weight:800;color:#111827;margin-bottom:3px;">Prénom Nom</h1>
                 <p style="font-size:13px;color:#6b7280;font-weight:500;">Informatique — B2</p>
               </div>
-              <div class="profile-actions" style="display:flex;gap:8px;">
+              <div style="display:flex;gap:8px;">
                 <button class="btn-dark" style="flex:1;">Envoyer message</button>
                 <button class="btn-outline" style="padding:8px 12px;">···</button>
               </div>
@@ -106,7 +62,7 @@
               <!-- Filtres publications -->
               <div>
                 <div class="section-header"><h2>Publications</h2><span class="sep"></span></div>
-                <div class="profile-filters" style="display:flex;gap:8px;margin-bottom:16px;">
+                <div style="display:flex;gap:8px;margin-bottom:16px;">
                   <button class="btn-dark" style="padding:7px 18px;font-size:12.5px;">Tous</button>
                   <button class="btn-outline" style="padding:7px 18px;font-size:12.5px;">Projets</button>
                   <button class="btn-outline" style="padding:7px 18px;font-size:12.5px;">Recherches</button>
@@ -157,7 +113,7 @@
               <!-- Statistiques -->
               <div>
                 <div class="section-header" style="margin-top:8px;"><h2>Statistiques</h2><span class="sep"></span></div>
-                <div class="profile-stats" style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;">
+                <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;">
                   <?php foreach ([['12','Publications'],['48','Abonnés'],['5','Compétences']] as $s): ?>
                   <div style="background:#f9fafb;border:1.5px solid #e5e7eb;border-radius:8px;padding:18px;text-align:center;">
                     <div style="font-family:'Montserrat',sans-serif;font-size:28px;font-weight:800;color:#111827;"><?= $s[0] ?></div>

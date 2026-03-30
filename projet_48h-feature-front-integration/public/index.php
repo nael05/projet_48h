@@ -1,5 +1,8 @@
 <?php
+// public/index.php
+// Point d'entrée de l'application (Architecture MVC front-controller)
 
+// Support pour le serveur web interne de PHP `php -S localhost:3000 -t public/`
 if (php_sapi_name() === 'cli-server' && is_file(__DIR__ . parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH))) {
     return false;
 }
@@ -29,22 +32,11 @@ $router = new Router();
 $router->add('/login', 'AuthController', 'login');
 $router->add('/register', 'AuthController', 'register');
 
+// Ajout des routes de la maquette YnovNet
 $router->add('/feed', 'FeedController', 'index');
-$router->add('/feed.php', 'FeedController', 'index');
 $router->add('/profile', 'ProfileController', 'show');
 $router->add('/messages', 'MessageController', 'index');
 
+// Dispatch final basé sur l'URL
 $requestUri = $_SERVER['REQUEST_URI'] ?? '/';
-
-$requestPath = parse_url($requestUri, PHP_URL_PATH) ?? '/';
-$basePath = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/')), '/');
-
-if ($basePath !== '' && $basePath !== '/' && strpos($requestPath, $basePath) === 0) {
-    $requestPath = substr($requestPath, strlen($basePath));
-}
-
-if ($requestPath === '' || $requestPath === false) {
-    $requestPath = '/';
-}
-
-$router->dispatch($requestPath);
+$router->dispatch($requestUri);
