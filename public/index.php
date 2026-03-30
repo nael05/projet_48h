@@ -35,7 +35,9 @@ $router->add('/feed.php', 'FeedController', 'index');
 $router->add('/posts', 'PostController', 'create');
 $router->add('/posts/like', 'PostController', 'toggleLike');
 $router->add('/posts/comment', 'PostController', 'addComment');
+$router->add('/posts/delete', 'PostController', 'delete');
 $router->add('/profile', 'ProfileController', 'show');
+$router->add('/user', 'ProfileController', 'showUser');
 $router->add('/messages', 'MessageController', 'index');
 
 $requestUri = $_SERVER['REQUEST_URI'] ?? '/';

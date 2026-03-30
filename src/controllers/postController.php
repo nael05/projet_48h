@@ -156,6 +156,60 @@ class PostController {
 		exit;
 	}
 
+	public function delete(): void {
+		$basePath = $this->getBasePath();
+
+		if (!$this->isAuthenticated()) {
+			header('Location: ' . $basePath . '/login');
+			exit;
+		}
+
+		if (($_SERVER['REQUEST_METHOD'] ?? 'GET') !== 'POST') {
+			header('Location: ' . $basePath . '/feed');
+			exit;
+		}
+
+		$postId = (int) ($_POST['post_id'] ?? 0);
+		if ($postId <= 0) {
+			header('Location: ' . $basePath . '/feed');
+			exit;
+		}
+
+		try {
+			$pdo = $this->getPdo();
+			$this->ensurePostsImageColumn($pdo);
+
+			$postStmt = $pdo->prepare('SELECT user_id, image_path FROM posts WHERE id = :post_id LIMIT 1');
+			$postStmt->execute(['post_id' => $postId]);
+			$post = $postStmt->fetch();
+
+			if (!$post || (int) $post['user_id'] !== (int) $_SESSION['user_id']) {
+				$_SESSION['publish_error'] = 'Vous ne pouvez supprimer que vos propres posts.';
+				header('Location: ' . $basePath . '/feed');
+				exit;
+			}
+
+			$deleteStmt = $pdo->prepare('DELETE FROM posts WHERE id = :post_id AND user_id = :user_id');
+			$deleteStmt->execute([
+				'post_id' => $postId,
+				'user_id' => (int) $_SESSION['user_id'],
+			]);
+
+			$imagePath = (string) ($post['image_path'] ?? '');
+			if ($imagePath !== '' && str_starts_with($imagePath, '/uploads/posts/')) {
+				$absoluteImagePath = __DIR__ . '/../../public' . str_replace('/', DIRECTORY_SEPARATOR, $imagePath);
+				if (is_file($absoluteImagePath)) {
+					@unlink($absoluteImagePath);
+				}
+			}
+		} catch (\PDOException $exception) {
+			$_SESSION['publish_error'] = 'Impossible de supprimer ce post pour le moment.';
+		}
+
+		header('Location: ' . $basePath . '/feed');
+		exit;
+	}
+
 	private function isAuthenticated(): bool {
 		return !empty($_SESSION['is_authenticated']) || !empty($_SESSION['user_id']);
 	}

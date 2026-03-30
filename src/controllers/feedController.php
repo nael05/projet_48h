@@ -29,7 +29,7 @@ class FeedController {
             $pdo = $this->getPdo();
             $this->ensurePostsImageColumn($pdo);
             $stmt = $pdo->query(
-                'SELECT p.id, p.content, p.image_path, p.created_at, u.username, u.prenom, u.nom
+                'SELECT p.id, p.user_id, p.content, p.image_path, p.created_at, u.username, u.prenom, u.nom
                  FROM posts p
                  INNER JOIN users u ON u.id = p.user_id
                  ORDER BY p.created_at DESC'

@@ -48,6 +48,8 @@
         <?php foreach ($posts as $post): ?>
         <?php
           $postId = (int) ($post['id'] ?? 0);
+          $postUserId = (int) ($post['user_id'] ?? 0);
+          $isOwnPost = ((int) ($post['user_id'] ?? 0) === (int) ($_SESSION['user_id'] ?? 0));
           $displayName = trim(((string) ($post['prenom'] ?? '')) . ' ' . ((string) ($post['nom'] ?? '')));
           if ($displayName === '') {
               $displayName = (string) ($post['username'] ?? 'Utilisateur');
@@ -66,11 +68,11 @@
         <div class="card" style="padding:20px;">
           <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px;">
             <div style="display:flex;align-items:center;gap:12px;">
-              <div style="width:42px;height:42px;border-radius:50%;background:#d1d5db;flex-shrink:0;"></div>
+              <a href="<?= htmlspecialchars(($basePath ?? '') . '/user?id=' . $postUserId, ENT_QUOTES, 'UTF-8') ?>" style="display:block;width:42px;height:42px;border-radius:50%;background:#d1d5db;flex-shrink:0;"></a>
               <div>
-                <div style="font-family:'Montserrat',sans-serif;font-size:14px;font-weight:700;color:#111827;">
+                <a href="<?= htmlspecialchars(($basePath ?? '') . '/user?id=' . $postUserId, ENT_QUOTES, 'UTF-8') ?>" style="font-family:'Montserrat',sans-serif;font-size:14px;font-weight:700;color:#111827;display:inline-block;">
                   <?= htmlspecialchars($displayName, ENT_QUOTES, 'UTF-8') ?>
-                </div>
+                </a>
                 <div style="font-size:12px;color:#6b7280;">Publication campus</div>
               </div>
             </div>
@@ -100,6 +102,20 @@
               </button>
             </form>
             <span style="font-size:12px;color:#6b7280;"><?= count($postComments) ?> commentaire<?= count($postComments) > 1 ? 's' : '' ?></span>
+            <?php if ($isOwnPost): ?>
+            <form action="<?= htmlspecialchars(($basePath ?? '') . '/posts/delete', ENT_QUOTES, 'UTF-8') ?>" method="POST" style="margin:0 0 0 auto;" onsubmit="return confirm('Supprimer ce post ?');">
+              <input type="hidden" name="post_id" value="<?= $postId ?>">
+              <button type="submit" class="btn-outline" title="Supprimer le post" aria-label="Supprimer le post" style="border-color:#fecaca;color:#b91c1c;background:#fff5f5;padding:6px 10px;line-height:1;">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M3 6h18"></path>
+                  <path d="M8 6V4h8v2"></path>
+                  <path d="M19 6l-1 14H6L5 6"></path>
+                  <path d="M10 11v6"></path>
+                  <path d="M14 11v6"></path>
+                </svg>
+              </button>
+            </form>
+            <?php endif; ?>
           </div>
 
           <div style="margin-top:12px;display:flex;flex-direction:column;gap:8px;">

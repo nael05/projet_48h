@@ -3,17 +3,30 @@ namespace App\Controllers;
 
 class ProfileController {
     public function show() {
-        if (empty($_SESSION['is_authenticated']) && empty($_SESSION['user_id'])) {
-            $basePath = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/')), '/');
-            $basePath = ($basePath === '/' || $basePath === '.') ? '' : $basePath;
+        $this->requireAuth();
 
-            header('Location: ' . $basePath . '/login');
+        $this->renderProfileByUserId((int) $_SESSION['user_id']);
+    }
+
+    public function showUser(): void {
+        $this->requireAuth();
+
+        $userId = (int) ($_GET['id'] ?? 0);
+        if ($userId <= 0) {
+            $basePath = $this->getBasePath();
+            header('Location: ' . $basePath . '/feed');
             exit;
         }
 
+        $this->renderProfileByUserId($userId);
+    }
+
+    private function renderProfileByUserId(int $userId): void {
+        $basePath = $this->getBasePath();
+
         $activeTab = 'profile';
         $activeNav = 'profile';
-        $mockUrl = 'localhost:3000/profile/1';
+        $mockUrl = 'localhost:3000/user?id=' . $userId;
 
         $profileFullName = (string) ($_SESSION['username'] ?? 'Utilisateur');
         $profileFormation = 'Profil Ynov';
@@ -21,22 +34,26 @@ class ProfileController {
         try {
             $pdo = $this->getPdo();
             $stmt = $pdo->prepare('SELECT nom, prenom, formation FROM users WHERE id = :id LIMIT 1');
-            $stmt->execute(['id' => (int) $_SESSION['user_id']]);
+            $stmt->execute(['id' => $userId]);
             $user = $stmt->fetch();
 
-            if ($user) {
-                $nom = trim((string) ($user['nom'] ?? ''));
-                $prenom = trim((string) ($user['prenom'] ?? ''));
-                $formation = trim((string) ($user['formation'] ?? ''));
+            if (!$user) {
+                $_SESSION['publish_error'] = 'Utilisateur introuvable.';
+                header('Location: ' . $basePath . '/feed');
+                exit;
+            }
 
-                $fullName = trim($prenom . ' ' . $nom);
-                if ($fullName !== '') {
-                    $profileFullName = $fullName;
-                }
+            $nom = trim((string) ($user['nom'] ?? ''));
+            $prenom = trim((string) ($user['prenom'] ?? ''));
+            $formation = trim((string) ($user['formation'] ?? ''));
 
-                if ($formation !== '') {
-                    $profileFormation = $formation;
-                }
+            $fullName = trim($prenom . ' ' . $nom);
+            if ($fullName !== '') {
+                $profileFullName = $fullName;
+            }
+
+            if ($formation !== '') {
+                $profileFormation = $formation;
             }
         } catch (\PDOException $exception) {
             // Fallback sur les valeurs de session en cas d'indisponibilite DB.
@@ -45,6 +62,19 @@ class ProfileController {
         require_once __DIR__ . '/../Views/layout/header.php';
         require_once __DIR__ . '/../Views/profile.php';
         require_once __DIR__ . '/../Views/layout/footer.php';
+    }
+
+    private function requireAuth(): void {
+        if (empty($_SESSION['is_authenticated']) && empty($_SESSION['user_id'])) {
+            $basePath = $this->getBasePath();
+            header('Location: ' . $basePath . '/login');
+            exit;
+        }
+    }
+
+    private function getBasePath(): string {
+        $basePath = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/')), '/');
+        return ($basePath === '/' || $basePath === '.') ? '' : $basePath;
     }
 
     private function getPdo(): \PDO {
