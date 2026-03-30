@@ -1,41 +1,3 @@
-Joey
-joey_78
-Invisible
-
-Joey [BMW],  — 07:36
-Slt deso je pourrais pas être là ce matin
-Nael — 08:56
-Okk tkt
-Envoie ton snap je susi jamais sur discord
-Ou insta comme tu veux
-Joey [BMW],  — 08:59
-joeysportes2019 snap
-Nael — 09:43
-Type de fichier joint : acrobat
-Challenge 48h - présentation.pdf
-2.88 MB
-Type de fichier joint : acrobat
-Cahier-des-Charges-Challenge-48H.pdf
-375.63 KB
-Nael — 14:11
-https://www.wampserver.com/
-WampServer
-WampServer
-WampServer est une plate-forme de développement Web sous Windows pour des applications Web dynamiques à l’aide du serveur Apache2, du langage de scripts PHP et d’une base de données MySQL.
-Image
-Nael — 15:53
--- phpMyAdmin SQL Dump
--- version 5.2.3
--- https://www.phpmyadmin.net/
---
--- Hôte : 127.0.0.1:3306
--- Généré le : lun. 30 mars 2026 à 13:53
-
-db_ynov_net (1).sql
-12 Ko
-﻿
-Nael
-nael02815
 -- phpMyAdmin SQL Dump
 -- version 5.2.3
 -- https://www.phpmyadmin.net/
@@ -294,5 +256,3 @@ COMMIT;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
-db_ynov_net (1).sql
-12 Ko
