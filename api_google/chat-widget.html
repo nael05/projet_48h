@@ -1,0 +1,17 @@
+<link rel="stylesheet" href="chat-widget.css">
+
+<div id="chat-widget-btn" onclick="toggleChat()">💬</div>
+
+<div id="chat-widget-window">
+    <div id="chat-widget-header">
+        <div>Assistant IA</div>
+        <span onclick="toggleChat()">✖</span>
+    </div>
+    <div id="chat-widget-messages"></div>
+    <div id="chat-widget-input-area">
+        <input type="text" id="chat-widget-input" placeholder="Posez votre question...">
+        <button id="chat-widget-send" onclick="sendChat()">Go</button>
+    </div>
+</div>
+
+<script src="chat-widget.js"></script>
