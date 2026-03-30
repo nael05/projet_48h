@@ -1,151 +1,121 @@
-<main class="max-w-7xl w-full mx-auto px-6 py-8 flex-grow">
-    <div class="bg-white border border-gray-300 shadow-sm rounded-lg flex overflow-hidden" style="min-height: 70vh;">
-        <!-- Left Sidebar: Contact List -->
-        <div class="w-1/3 border-r border-gray-300 flex flex-col bg-white">
-            <div class="p-5 border-b border-gray-300">
-                <div class="relative">
-                    <span class="absolute inset-y-0 left-0 flex items-center pl-3.5">
-                        <svg class="w-4 h-4 text-tech-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
-                    </span>
-                    <input type="text" class="w-full pl-10 pr-4 py-2.5 bg-gray-50 border border-gray-300 rounded font-sans text-sm focus:outline-none focus:ring-1 focus:ring-tech-blue transition" placeholder="Rechercher une conv...">
-                </div>
-            </div>
-            
-            <div class="flex-1 overflow-y-auto">
-                <!-- Contact 1 (Active/Unread) -->
-                <div class="flex items-center p-5 border-b border-gray-100 bg-blue-50/30 cursor-pointer border-l-4 border-l-tech-blue">
-                    <div class="relative">
-                        <div class="w-12 h-12 rounded-full bg-gray-300"></div>
-                        <span class="absolute bottom-0 right-0 w-3.5 h-3.5 bg-green-500 border-2 border-white rounded-full"></span>
-                    </div>
-                    <div class="ml-4 flex-1">
-                        <div class="flex justify-between items-baseline mb-1">
-                            <h4 class="text-sm font-bold text-gray-900 font-sans tracking-wide">Alice Martin</h4>
-                            <span class="text-xs text-gray-500 font-medium">14h30</span>
-                        </div>
-                        <p class="text-xs text-gray-700 font-semibold truncate flex items-center gap-2">
-                            <span class="w-2 h-2 rounded-full bg-tech-blue"></span>
-                            Tu peux m'aider sur le TP?
-                        </p>
-                    </div>
-                </div>
+  <div style="flex:1; padding:24px; display:flex; flex-direction:column; align-items:center;">
+    <div style="width:100%; max-width:1200px; flex:1; display:flex; background:var(--container-gradient); backdrop-filter:blur(12px); border-radius:16px; overflow:hidden; box-shadow:0 12px 40px rgba(0,0,0,0.15); border:1px solid rgba(255,255,255,0.4);">
 
-                <!-- Contact 2 -->
-                <div class="flex items-center p-5 border-b border-gray-100 hover:bg-gray-50 cursor-pointer transition border-l-4 border-l-transparent">
-                    <div class="w-12 h-12 rounded-full bg-gray-300"></div>
-                    <div class="ml-4 flex-1">
-                        <div class="flex justify-between items-baseline mb-1">
-                            <h4 class="text-sm font-medium text-gray-700 font-sans tracking-wide">Bob Durand</h4>
-                            <span class="text-xs text-gray-400 font-medium">Hier</span>
-                        </div>
-                        <div class="h-2.5 bg-gray-200 rounded w-2/3 mt-2.5"></div>
-                    </div>
-                </div>
+    <!-- ══ CONTACTS (gauche) ══ -->
+    <div style="width:320px;flex-shrink:0;border-right:1px solid rgba(0,0,0,0.1);display:flex;flex-direction:column;background:transparent;">
 
-                <!-- Contact 3 -->
-                <div class="flex items-center p-5 border-b border-gray-100 hover:bg-gray-50 cursor-pointer transition border-l-4 border-l-transparent">
-                    <div class="w-12 h-12 rounded-full bg-gray-300"></div>
-                    <div class="ml-4 flex-1">
-                        <div class="flex justify-between items-baseline mb-1">
-                            <h4 class="text-sm font-medium text-gray-700 font-sans tracking-wide">Clara Chen</h4>
-                            <span class="text-xs text-gray-400 font-medium">Lun</span>
-                        </div>
-                        <div class="h-2.5 bg-gray-200 rounded w-1/2 mt-2.5"></div>
-                    </div>
-                </div>
-                
-                <!-- Contact 4 -->
-                <div class="flex items-center p-5 border-b border-gray-100 hover:bg-gray-50 cursor-pointer transition border-l-4 border-l-transparent">
-                    <div class="w-12 h-12 rounded-full bg-gray-300"></div>
-                    <div class="ml-4 flex-1">
-                        <div class="flex justify-between items-baseline mb-1">
-                            <h4 class="text-sm font-medium text-gray-700 font-sans tracking-wide">David Roy</h4>
-                        </div>
-                        <div class="h-2.5 bg-gray-200 rounded w-3/4 mt-2.5"></div>
-                    </div>
-                </div>
-            </div>
+      <!-- Search -->
+      <div style="padding:16px;border-bottom:1px solid #e5e7eb;">
+        <h2 style="font-family:'Montserrat',sans-serif;font-size:14px;font-weight:700;color:#111827;margin-bottom:10px;">Messages</h2>
+        <div style="position:relative;">
+          <svg style="position:absolute;left:10px;top:50%;transform:translateY(-50%);width:14px;height:14px;fill:none;stroke:#9ca3af;stroke-width:2;" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path stroke-linecap="round" d="M21 21l-4.35-4.35"/></svg>
+          <input type="text" placeholder="Rechercher une conv..."
+            style="width:100%;background:#f9fafb;border:1.5px solid #e5e7eb;border-radius:6px;padding:8px 12px 8px 32px;font-family:'Roboto',sans-serif;font-size:13px;color:#374151;outline:none;transition:border-color .2s;"
+            onfocus="this.style.borderColor='#374151'" onblur="this.style.borderColor='#e5e7eb'">
+        </div>
+      </div>
 
-            <div class="p-4 border-t border-gray-200 bg-gray-50/50">
-                <span class="bg-white text-ynov-orange font-mono text-xs px-2 py-1 rounded border border-ynov-orange shadow-sm inline-block">GET /messages - polling 5s</span>
+      <!-- Liste contacts -->
+      <div style="flex:1;overflow-y:auto;">
+        <!-- Alice : non-lu + accent border -->
+        <div style="display:flex;align-items:center;gap:12px;padding:14px 16px;border-left:3px solid #1f2937;background:#f9fafb;border-bottom:1px solid #f3f4f6;cursor:pointer;">
+          <div style="position:relative;flex-shrink:0;">
+            <div style="width:42px;height:42px;border-radius:50%;background:#d1d5db;"></div>
+            <span style="position:absolute;bottom:1px;right:1px;width:10px;height:10px;border-radius:50%;background:#22c55e;border:2px solid #fff;"></span>
+          </div>
+          <div style="flex:1;min-width:0;">
+            <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:3px;">
+              <span style="font-family:'Montserrat',sans-serif;font-size:13px;font-weight:700;color:#111827;">Alice Martin</span>
+              <span style="font-size:11px;color:#6b7280;font-weight:500;">14h32</span>
             </div>
+            <p style="font-size:12px;color:#374151;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">Tu peux m'aider sur le TP?</p>
+          </div>
         </div>
 
-        <!-- Right Side: Chat Area -->
-        <div class="w-2/3 flex flex-col bg-[#F9F9F9] relative">
-            <!-- Chat Header -->
-            <div class="px-6 py-4 bg-white border-b border-gray-300 flex justify-between items-center shadow-sm z-10 h-[89px]">
-                <div class="flex items-center gap-4">
-                    <div class="w-12 h-12 rounded-full bg-gray-300"></div>
-                    <div>
-                        <h3 class="text-base font-bold text-gray-900 leading-tight font-heading">Alice Martin</h3>
-                        <p class="text-xs text-green-600 font-bold tracking-wide">En ligne</p>
-                    </div>
-                </div>
-                <button class="border border-gray-300 bg-white text-gray-500 px-4 py-2 rounded text-xs font-bold hover:bg-gray-50 hover:text-gray-800 transition shadow-sm uppercase tracking-wider">
-                    Voir le profil →
-                </button>
+        <?php foreach ([['Bob Durand','Hier'],['Clara Chen','Lun'],['David Roy','']] as $c): ?>
+        <div style="display:flex;align-items:center;gap:12px;padding:14px 16px;border-left:3px solid transparent;border-bottom:1px solid #f3f4f6;cursor:pointer;transition:background .15s;" onmouseenter="this.style.background='#f9fafb'" onmouseleave="this.style.background='#fff'">
+          <div style="width:42px;height:42px;border-radius:50%;background:#d1d5db;flex-shrink:0;"></div>
+          <div style="flex:1;min-width:0;">
+            <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:3px;">
+              <span style="font-family:'Montserrat',sans-serif;font-size:13px;font-weight:600;color:#374151;"><?= $c[0] ?></span>
+              <span style="font-size:11px;color:#9ca3af;"><?= $c[1] ?></span>
             </div>
-
-            <!-- Chat Messages -->
-            <div class="flex-1 p-8 overflow-y-auto space-y-5 flex flex-col">
-                <div class="text-center mb-6">
-                    <span class="text-xs text-gray-400 font-bold bg-gray-200/60 px-4 py-1.5 rounded-full uppercase tracking-wider">Aujourd'hui 14h20</span>
-                </div>
-
-                <!-- Msg received -->
-                <div class="flex justify-start">
-                    <div class="bg-white border border-gray-200 text-gray-700 font-medium px-5 py-3 rounded-2xl rounded-tl-sm text-sm shadow-sm max-w-md font-sans">
-                        Salut ! T'as avancé sur le projet ?
-                    </div>
-                </div>
-
-                <!-- Msg sent -->
-                <div class="flex justify-end">
-                    <div class="bg-gray-800 text-white px-5 py-3 rounded-2xl rounded-tr-sm text-sm shadow-sm max-w-md font-sans font-medium">
-                        Oui, j'ai fini les models hier soir !
-                    </div>
-                </div>
-
-                <!-- Msg received -->
-                <div class="flex justify-start">
-                    <div class="bg-white border border-gray-200 text-gray-700 font-medium px-5 py-3 rounded-2xl rounded-tl-sm text-sm shadow-sm max-w-md font-sans">
-                        Super, tu peux m'aider sur le TP Node ?
-                    </div>
-                </div>
-
-                <!-- Msg sent -->
-                <div class="flex justify-end">
-                    <div class="bg-gray-800 text-white px-5 py-3 rounded-2xl rounded-tr-sm text-sm shadow-sm max-w-md font-sans font-medium">
-                        Bien sûr, on se retrouve à 16h ?
-                    </div>
-                </div>
-
-                <!-- Msg received -->
-                <div class="flex justify-start mb-1">
-                    <div class="bg-[#EFF6FF] border border-[#BFDBFE] text-[#1E3A8A] font-medium px-5 py-3 rounded-2xl rounded-tl-sm text-sm shadow-sm max-w-md font-sans">
-                        Parfait, à tout à l'heure 🔥
-                    </div>
-                </div>
-                <div class="pr-2 flex justify-end items-center gap-1.5 opacity-70">
-                    <span class="text-xs text-gray-500 font-semibold tracking-wide">Lu</span> 
-                    <svg class="w-3.5 h-3.5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
-                </div>
-            </div>
-
-            <!-- Chat Input -->
-            <div class="p-6 bg-white border-t border-gray-300">
-                <div class="flex items-center gap-3">
-                    <button class="text-gray-400 hover:text-gray-600 transition p-2.5 border border-gray-300 rounded bg-gray-50 shadow-sm">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"></path></svg>
-                    </button>
-                    <input type="text" class="flex-1 border border-gray-300 rounded p-3 text-sm focus:outline-none focus:ring-1 focus:ring-gray-400 bg-gray-50 font-sans shadow-inner placeholder-gray-400" placeholder="Écrire un message...">
-                    <button class="bg-tech-blue-dark text-white px-8 py-3 rounded text-sm font-bold shadow-sm hover:bg-black transition font-heading">Envoyer</button>
-                </div>
-                <div class="mt-4 flex">
-                    <span class="bg-white text-ynov-orange font-mono text-xs px-2 py-1 rounded border border-ynov-orange shadow-sm inline-block">POST /messages - MessageModel.send()</span>
-                </div>
-            </div>
+            <div style="height:8px;background:#e5e7eb;border-radius:3px;width:70%;"></div>
+          </div>
         </div>
+        <?php endforeach; ?>
+      </div>
+
+      <!-- Badge API -->
+      <div style="padding:12px 16px;border-top:1px dashed var(--gray-400);background:transparent;">
+        <span class="badge-api">GET /messages — polling 3s</span>
+      </div>
     </div>
-</main>
+
+    <!-- ══ CONVERSATION (droite) ══ -->
+    <div style="flex:1;display:flex;flex-direction:column;background:rgba(255,255,255,0.4);">
+
+      <!-- Header conv -->
+      <div style="background:#fff;border-bottom:1px solid #e5e7eb;padding:14px 20px;display:flex;justify-content:space-between;align-items:center;">
+        <div style="display:flex;align-items:center;gap:12px;">
+          <div style="width:40px;height:40px;border-radius:50%;background:#d1d5db;"></div>
+          <div>
+            <p style="font-family:'Montserrat',sans-serif;font-size:14px;font-weight:700;color:#111827;margin-bottom:2px;">Alice Martin</p>
+            <p style="font-size:12px;color:#22c55e;font-weight:600;display:flex;align-items:center;gap:5px;">
+              <span style="width:7px;height:7px;border-radius:50%;background:#22c55e;display:inline-block;"></span>En ligne
+            </p>
+          </div>
+        </div>
+        <button class="btn-outline" style="font-size:12.5px;padding:7px 16px;">Voir le profil →</button>
+      </div>
+
+      <!-- Messages -->
+      <div style="flex:1;overflow-y:auto;padding:24px 28px;display:flex;flex-direction:column;gap:12px;">
+        <div style="text-align:center;margin-bottom:8px;">
+          <span style="font-size:11.5px;color:#9ca3af;font-weight:600;background:#e5e7eb;padding:4px 14px;border-radius:99px;">Aujourd'hui 14h20</span>
+        </div>
+
+        <!-- Reçu -->
+        <div style="display:flex;justify-content:flex-start;">
+          <div style="background:#fff;border:1px solid #e5e7eb;color:#374151;padding:10px 16px;border-radius:12px 12px 12px 3px;font-size:13.5px;max-width:60%;box-shadow:0 1px 3px rgba(0,0,0,.06);">Salut ! T'as avancé sur le projet ?</div>
+        </div>
+        <!-- Envoyé -->
+        <div style="display:flex;justify-content:flex-end;">
+          <div style="background:#1f2937;color:#fff;padding:10px 16px;border-radius:12px 12px 3px 12px;font-size:13.5px;max-width:60%;">Oui, j'ai fini les models hier soir !</div>
+        </div>
+        <!-- Reçu -->
+        <div style="display:flex;justify-content:flex-start;">
+          <div style="background:#fff;border:1px solid #e5e7eb;color:#374151;padding:10px 16px;border-radius:12px 12px 12px 3px;font-size:13.5px;max-width:60%;box-shadow:0 1px 3px rgba(0,0,0,.06);">Super, tu peux m'aider sur le TP Node ?</div>
+        </div>
+        <!-- Envoyé -->
+        <div style="display:flex;justify-content:flex-end;">
+          <div style="background:#1f2937;color:#fff;padding:10px 16px;border-radius:12px 12px 3px 12px;font-size:13.5px;max-width:60%;">Bien sûr, on se retrouve à 16h ?</div>
+        </div>
+        <!-- Reçu -->
+        <div style="display:flex;justify-content:flex-start;">
+          <div style="background:#fff;border:1px solid #e5e7eb;color:#374151;padding:10px 16px;border-radius:12px 12px 12px 3px;font-size:13.5px;max-width:60%;box-shadow:0 1px 3px rgba(0,0,0,.06);">Parfait, à tout à l'heure 🔥</div>
+        </div>
+        <div style="text-align:right;font-size:11px;color:#9ca3af;font-weight:500;padding-right:2px;">Lu ✓</div>
+      </div>
+
+      </div>
+
+      <!-- Input -->
+      <div style="background:transparent;border-top:1px solid rgba(0,0,0,0.1);padding:14px 20px;">
+        <div style="display:flex;align-items:center;gap:10px;">
+          <button style="width:36px;height:36px;border:1.5px solid #e5e7eb;border-radius:6px;background:#f9fafb;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:border-color .2s;" onmouseenter="this.style.borderColor='#374151'" onmouseleave="this.style.borderColor='#e5e7eb'">
+            <svg width="16" height="16" fill="none" stroke="#6b7280" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66l-9.2 9.19a2 2 0 01-2.83-2.83l8.49-8.48"/></svg>
+          </button>
+          <input type="text" placeholder="Écrire un message..."
+            style="flex:1;border:1.5px solid #e5e7eb;border-radius:6px;padding:10px 14px;font-family:'Roboto',sans-serif;font-size:13.5px;color:#374151;background:#f9fafb;outline:none;transition:border-color .2s;"
+            onfocus="this.style.borderColor='#374151'" onblur="this.style.borderColor='#e5e7eb'">
+          <button class="btn-dark" style="flex-shrink:0;">Envoyer</button>
+        </div>
+        <div style="margin-top:10px;">
+          <span class="badge-api">POST /messages — MessageModel.send()</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>

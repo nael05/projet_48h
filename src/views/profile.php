@@ -1,155 +1,132 @@
-<main class="max-w-7xl w-full mx-auto px-6 py-8 flex-grow">
-    <div class="bg-white border border-gray-300 shadow-sm rounded-lg overflow-hidden">
-        <!-- Banner Profile -->
-        <div class="h-56 bg-[#e2e2e2] flex items-center justify-center border-b border-gray-300 shadow-inner">
-             <span class="text-gray-400 font-sans tracking-widest text-lg">[ bannière de profil ]</span>
+  <div style="flex:1; padding:24px 28px;">
+    <div style="max-width:1200px;margin:0 auto;">
+
+      <!-- Bannière + Avatar -->
+      <div class="card" style="overflow:hidden;margin-bottom:24px;background:var(--container-gradient);backdrop-filter:blur(12px);border-radius:16px;box-shadow:0 12px 40px rgba(0,0,0,0.15);border:1px solid rgba(255,255,255,0.4);">
+        <div style="height:200px;background:rgba(255,255,255,0.5);display:flex;align-items:center;justify-content:center;border-bottom:1px solid rgba(0,0,0,0.1);">
+          <span style="font-family:'SFMono-Regular',monospace;font-size:13px;color:#9ca3af;letter-spacing:.05em;">[ bannière de profil ]</span>
         </div>
-        
-        <div class="px-8 pb-10 relative">
-            <!-- Avatar overlapping banner -->
-            <div class="-mt-16 mb-4">
-                <div class="w-32 h-32 rounded-full bg-gray-300 border-4 border-white flex items-center justify-center shadow-md"></div>
-            </div>
-            
-            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12">
-                
-                <!-- Left Sidebar (User Info & AI) -->
-                <div class="lg:col-span-4 space-y-8">
-                    <div>
-                        <h1 class="text-2xl font-heading font-extrabold text-gray-900">Prénom Nom</h1>
-                        <p class="text-sm text-gray-500 font-sans font-medium">Informatique - B2</p>
-                    </div>
-                    
-                    <div class="flex gap-2.5">
-                        <button class="bg-tech-blue-dark text-white px-6 py-2.5 rounded text-sm font-semibold shadow-sm flex-1 hover:bg-black transition">
-                            Envoyer message
-                        </button>
-                        <button class="border border-gray-300 bg-white text-gray-600 px-4 py-2.5 rounded text-sm font-bold hover:bg-gray-50 transition shadow-sm">
-                            -
-                        </button>
-                    </div>
+        <div style="padding:0 28px 28px;position:relative;">
+          <div style="width:88px;height:88px;border-radius:50%;background:#d1d5db;border:4px solid #fff;margin-top:-44px;margin-bottom:14px;box-shadow:0 1px 6px rgba(0,0,0,.12);"></div>
 
-                    <!-- BIO -->
-                    <div>
-                        <h3 class="text-xs font-heading font-bold text-gray-400 uppercase tracking-widest mb-3">Bio</h3>
-                        <div class="bg-[#FAFAFA] border border-dashed border-gray-300 rounded p-4 space-y-2.5">
-                            <div class="h-2.5 bg-gray-300 rounded w-full"></div>
-                            <div class="h-2.5 bg-gray-300 rounded w-4/5"></div>
-                            <div class="h-2.5 bg-gray-300 rounded w-2/3"></div>
-                        </div>
-                    </div>
+          <div style="display:grid;grid-template-columns:280px 1fr;gap:32px;align-items:start;">
 
-                    <!-- COMPETENCES -->
-                    <div>
-                        <div class="border-t border-dashed border-ynov-orange mb-4"></div>
-                        <h3 class="text-xs font-heading font-bold text-gray-400 uppercase tracking-widest mb-3">Compétences</h3>
-                        <div class="flex flex-wrap gap-2.5">
-                            <span class="px-4 py-1.5 rounded-full border border-gray-300 text-xs text-gray-600 font-sans shadow-sm bg-white">JavaScript</span>
-                            <span class="px-4 py-1.5 rounded-full border border-gray-300 text-xs text-gray-600 font-sans shadow-sm bg-white">Node.js</span>
-                            <span class="px-4 py-1.5 rounded-full border border-gray-300 text-xs text-gray-600 font-sans shadow-sm bg-white">MySQL</span>
-                            <span class="px-4 py-1.5 rounded-full border border-gray-300 text-xs text-gray-600 font-sans shadow-sm bg-white">React</span>
-                            <span class="px-4 py-1.5 rounded-full border border-gray-300 text-xs text-gray-400 font-sans shadow-sm border-dashed bg-white hover:bg-gray-50 cursor-pointer transition">+ Ajouter</span>
-                        </div>
-                    </div>
+            <!-- Gauche : infos profil -->
+            <div style="display:flex;flex-direction:column;gap:18px;">
+              <div>
+                <h1 style="font-family:'Montserrat',sans-serif;font-size:20px;font-weight:800;color:#111827;margin-bottom:3px;">Prénom Nom</h1>
+                <p style="font-size:13px;color:#6b7280;font-weight:500;">Informatique — B2</p>
+              </div>
+              <div style="display:flex;gap:8px;">
+                <button class="btn-dark" style="flex:1;">Envoyer message</button>
+                <button class="btn-outline" style="padding:8px 12px;">···</button>
+              </div>
 
-                    <!-- RESUME IA -->
-                    <div class="pt-6 border-t border-dashed border-ynov-orange relative">
-                        <h3 class="text-sm font-heading font-bold text-gray-900 mb-3 flex items-center gap-2">Résumé IA <span class="text-yellow-500">✨</span></h3>
-                        
-                        <div class="bg-blue-50/50 border border-dashed border-blue-400 rounded-lg p-5 mb-4 space-y-3">
-                            <div class="h-3 bg-blue-300/60 rounded w-full"></div>
-                            <div class="h-3 bg-blue-300/60 rounded w-3/4"></div>
-                        </div>
-                        
-                        <button class="w-full bg-tech-blue-dark text-white px-4 py-2.5 rounded text-sm font-medium shadow-sm hover:bg-black transition">
-                            Générer résumé (IA)
-                        </button>
-                        <div class="mt-4 flex justify-start items-center">
-                            <span class="bg-white text-ynov-orange font-mono text-xs px-2 py-1 rounded border border-ynov-orange shadow-sm inline-block">
-                                POST /ai/summarize - Gemini
-                            </span>
-                        </div>
-                    </div>
+              <!-- BIO -->
+              <div>
+                <p style="font-family:'Montserrat',sans-serif;font-size:11px;font-weight:700;color:#9ca3af;text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px;">Bio</p>
+                <div style="background:#f9fafb;border:1.5px dashed #d1d5db;border-radius:6px;padding:12px;">
+                  <div class="skel" style="width:100%;height:9px;margin-bottom:7px;"></div>
+                  <div class="skel" style="width:82%;height:9px;margin-bottom:7px;"></div>
+                  <div class="skel" style="width:60%;height:9px;"></div>
                 </div>
+              </div>
 
-                <!-- Right Main Column (Publications & Stats) -->
-                <div class="lg:col-span-8">
-                    
-                    <h3 class="text-sm font-heading font-semibold text-gray-800 border-b border-gray-300 pb-2 mb-4">Publications</h3>
-                    
-                    <!-- Tabs (Tous, Projets, Recherches) -->
-                    <div class="flex gap-2 mb-6">
-                        <button class="bg-tech-blue-dark text-white px-5 py-2 rounded text-sm font-heading shadow-sm">Tous</button>
-                        <button class="bg-white border border-gray-300 text-gray-500 px-5 py-2 rounded text-sm font-heading hover:bg-gray-50 transition shadow-sm">Projets</button>
-                        <button class="bg-white border border-gray-300 text-gray-500 px-5 py-2 rounded text-sm font-heading hover:bg-gray-50 transition shadow-sm">Recherches</button>
-                    </div>
-
-                    <!-- User's Posts -->
-                    <div class="space-y-6">
-                        <!-- Post 1 (Text) -->
-                        <div class="bg-white rounded border border-gray-300 p-6 shadow-sm">
-                            <div class="flex justify-between items-start mb-5">
-                                <div class="flex items-center space-x-4">
-                                    <div class="w-12 h-12 rounded-full bg-gray-300"></div>
-                                    <div class="h-3 bg-gray-300 rounded w-32"></div>
-                                </div>
-                                <span class="text-xs text-gray-400 font-medium tracking-wide">2 jours</span>
-                            </div>
-                            <div class="mb-6 space-y-2.5">
-                                <div class="h-3 bg-gray-300 rounded w-full"></div>
-                                <div class="h-3 bg-gray-300 rounded w-2/3"></div>
-                            </div>
-                            <div class="flex justify-between items-center border-t border-gray-100 pt-3">
-                                <div class="flex space-x-3">
-                                    <span class="border border-gray-300 rounded px-3 py-1.5 text-xs text-gray-600 flex items-center gap-1 shadow-sm"><span class="text-ynov-orange font-emoji">👍</span> 12</span>
-                                    <span class="border border-gray-300 rounded px-3 py-1.5 text-xs text-gray-600 flex items-center gap-1 shadow-sm"><span class="text-gray-400">💬</span> 3</span>
-                                </div>
-                                <button class="text-red-500 border border-red-300 hover:bg-red-50 px-4 py-1.5 rounded text-xs font-semibold shadow-sm transition">Supprimer</button>
-                            </div>
-                        </div>
-
-                        <!-- Post 2 (Image) -->
-                        <div class="bg-white rounded border border-gray-300 p-6 shadow-sm">
-                            <div class="flex justify-between items-start mb-5">
-                                <div class="flex items-center space-x-4">
-                                    <div class="w-12 h-12 rounded-full bg-gray-300"></div>
-                                    <div class="h-3 bg-gray-300 rounded w-28"></div>
-                                </div>
-                                <span class="text-xs text-gray-400 font-medium tracking-wide">5 jours</span>
-                            </div>
-                            <!-- Image Frame -->
-                            <div class="w-full h-48 bg-[#dfdfdf] border border-gray-300 rounded flex items-center justify-center mb-5 inner-shadow">
-                                <span class="text-gray-500 font-sans tracking-widest text-lg opacity-80">[ image ]</span>
-                            </div>
-                            <div class="flex justify-between items-center border-t border-gray-100 pt-3">
-                                <div class="flex space-x-3">
-                                    <span class="border border-gray-300 rounded px-3 py-1.5 text-xs text-gray-600 flex items-center gap-1 shadow-sm"><span class="text-ynov-orange font-emoji">👍</span> 8</span>
-                                    <span class="border border-gray-300 rounded px-3 py-1.5 text-xs text-gray-600 flex items-center gap-1 shadow-sm"><span class="text-gray-400">💬</span> 1</span>
-                                </div>
-                                <button class="text-red-500 border border-red-300 hover:bg-red-50 px-4 py-1.5 rounded text-xs font-semibold shadow-sm transition">Supprimer</button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Statistiques de bas de page -->
-                    <h3 class="text-sm font-heading font-semibold text-gray-800 border-b border-gray-300 pb-2 mt-10 mb-4">Statistiques</h3>
-                    <div class="grid grid-cols-3 gap-6">
-                        <div class="border border-dashed border-gray-300 bg-gray-50 rounded-lg p-5 text-center shadow-sm">
-                            <div class="text-3xl font-extrabold text-ynov-orange">12</div>
-                            <div class="text-xs text-gray-500 font-medium mt-1 uppercase tracking-widest">Publications</div>
-                        </div>
-                        <div class="border border-dashed border-gray-300 bg-gray-50 rounded-lg p-5 text-center shadow-sm">
-                            <div class="text-3xl font-extrabold text-gray-800">48</div>
-                            <div class="text-xs text-gray-500 font-medium mt-1 uppercase tracking-widest">Abonnés</div>
-                        </div>
-                        <div class="border border-dashed border-gray-300 bg-gray-50 rounded-lg p-5 text-center shadow-sm">
-                            <div class="text-3xl font-extrabold text-gray-800">5</div>
-                            <div class="text-xs text-gray-500 font-medium mt-1 uppercase tracking-widest">Compétences</div>
-                        </div>
-                    </div>
-
+              <!-- COMPÉTENCES -->
+              <div>
+                <p style="font-family:'Montserrat',sans-serif;font-size:11px;font-weight:700;color:#9ca3af;text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px;">Compétences</p>
+                <div style="display:flex;flex-wrap:wrap;gap:7px;">
+                  <?php foreach (['JavaScript','Node.js','MySQL','React'] as $skill): ?>
+                  <span style="padding:4px 12px;border-radius:99px;border:1px solid #d1d5db;font-size:12px;color:#374151;background:#f9fafb;font-weight:500;"><?= $skill ?></span>
+                  <?php endforeach; ?>
+                  <span style="padding:4px 12px;border-radius:99px;border:1.5px dashed #d1d5db;font-size:12px;color:#9ca3af;background:#fff;cursor:pointer;">+ Ajouter</span>
                 </div>
+              </div>
+
+              <!-- RÉSUMÉ IA -->
+              <div style="padding-top:16px;border-top:1px solid rgba(0,0,0,0.1);">
+                <p style="font-family:'Montserrat',sans-serif;font-size:13px;font-weight:700;color:#111827;margin-bottom:10px;">Résumé IA ✨</p>
+                <div style="background:#eff6ff;border:1.5px dashed #93c5fd;border-radius:6px;padding:12px;margin-bottom:10px;">
+                  <div style="height:9px;background:#bfdbfe;border-radius:4px;width:100%;margin-bottom:7px;"></div>
+                  <div style="height:9px;background:#bfdbfe;border-radius:4px;width:75%;"></div>
+                </div>
+                <button class="btn-dark" style="width:100%;margin-bottom:8px;">Générer résumé (IA)</button>
+                <div style="margin-top:10px;padding-top:10px;border-top:1px dashed var(--gray-400);">
+                  <span class="badge-api">POST /ai/summarize — Gemini</span>
+                </div>
+              </div>
+            </div> <!-- FERMETURE COLONNE GAUCHE MANQUANTE -->
+
+            <!-- Droite : Publications + Stats -->
+            <div style="display:flex;flex-direction:column;gap:20px;">
+              <!-- Filtres publications -->
+              <div>
+                <div class="section-header"><h2>Publications</h2><span class="sep"></span></div>
+                <div style="display:flex;gap:8px;margin-bottom:16px;">
+                  <button class="btn-dark" style="padding:7px 18px;font-size:12.5px;">Tous</button>
+                  <button class="btn-outline" style="padding:7px 18px;font-size:12.5px;">Projets</button>
+                  <button class="btn-outline" style="padding:7px 18px;font-size:12.5px;">Recherches</button>
+                </div>
+              </div>
+
+              <!-- Post card 1 -->
+              <div class="card" style="padding:18px;background:rgba(255,255,255,0.6);border:1px solid rgba(255,255,255,0.5);">
+                <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px;">
+                  <div style="display:flex;align-items:center;gap:10px;">
+                    <div style="width:38px;height:38px;border-radius:50%;background:#d1d5db;"></div>
+                    <div class="skel" style="width:100px;height:10px;"></div>
+                  </div>
+                  <span style="font-size:11px;color:#9ca3af;">2 jours</span>
+                </div>
+                <div style="margin-bottom:12px;"><div class="skel" style="height:9px;width:100%;margin-bottom:6px;"></div><div class="skel" style="height:9px;width:72%;"></div></div>
+                <div style="width:100%;height:130px;background:#e5e7eb;border:1px solid #d1d5db;border-radius:5px;display:flex;align-items:center;justify-content:center;margin-bottom:12px;">
+                  <span style="font-family:'SFMono-Regular',monospace;font-size:11px;color:#9ca3af;">[ image ]</span>
+                </div>
+                <div style="display:flex;justify-content:space-between;align-items:center;padding-top:10px;border-top:1px solid #f3f4f6;">
+                  <div style="display:flex;gap:8px;">
+                    <span style="font-size:12px;color:#6b7280;background:#f9fafb;border:1px solid #e5e7eb;border-radius:4px;padding:3px 10px;display:flex;align-items:center;gap:4px;"><span>👍</span> 12</span>
+                    <span style="font-size:12px;color:#6b7280;background:#f9fafb;border:1px solid #e5e7eb;border-radius:4px;padding:3px 10px;display:flex;align-items:center;gap:4px;"><span>💬</span> 3</span>
+                  </div>
+                  <button style="font-size:12px;color:#dc2626;background:#fff;border:1px solid #fca5a5;border-radius:4px;padding:4px 12px;cursor:pointer;font-family:'Montserrat',sans-serif;font-weight:600;">Supprimer</button>
+                </div>
+              </div>
+
+              <!-- Post card 2 -->
+              <div class="card" style="padding:18px;background:rgba(255,255,255,0.6);border:1px solid rgba(255,255,255,0.5);">
+                <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px;">
+                  <div style="display:flex;align-items:center;gap:10px;">
+                    <div style="width:38px;height:38px;border-radius:50%;background:#d1d5db;"></div>
+                    <div class="skel" style="width:85px;height:10px;"></div>
+                  </div>
+                  <span style="font-size:11px;color:#9ca3af;">5 jours</span>
+                </div>
+                <div style="margin-bottom:12px;"><div class="skel" style="height:9px;width:100%;margin-bottom:6px;"></div><div class="skel" style="height:9px;width:60%;"></div></div>
+                <div style="display:flex;justify-content:space-between;align-items:center;padding-top:10px;border-top:1px solid #f3f4f6;">
+                  <div style="display:flex;gap:8px;">
+                    <span style="font-size:12px;color:#6b7280;background:#f9fafb;border:1px solid #e5e7eb;border-radius:4px;padding:3px 10px;display:flex;align-items:center;gap:4px;"><span>👍</span> 8</span>
+                    <span style="font-size:12px;color:#6b7280;background:#f9fafb;border:1px solid #e5e7eb;border-radius:4px;padding:3px 10px;display:flex;align-items:center;gap:4px;"><span>💬</span> 1</span>
+                  </div>
+                  <button style="font-size:12px;color:#dc2626;background:#fff;border:1px solid #fca5a5;border-radius:4px;padding:4px 12px;cursor:pointer;font-family:'Montserrat',sans-serif;font-weight:600;">Supprimer</button>
+                </div>
+              </div>
+
+              <!-- Statistiques -->
+              <div>
+                <div class="section-header" style="margin-top:8px;"><h2>Statistiques</h2><span class="sep"></span></div>
+                <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;">
+                  <?php foreach ([['12','Publications'],['48','Abonnés'],['5','Compétences']] as $s): ?>
+                  <div style="background:#f9fafb;border:1.5px solid #e5e7eb;border-radius:8px;padding:18px;text-align:center;">
+                    <div style="font-family:'Montserrat',sans-serif;font-size:28px;font-weight:800;color:#111827;"><?= $s[0] ?></div>
+                    <div style="font-size:11px;color:#6b7280;font-weight:500;text-transform:uppercase;letter-spacing:.07em;margin-top:4px;"><?= $s[1] ?></div>
+                  </div>
+                  <?php endforeach; ?>
+                </div>
+              </div>
+
             </div>
+          </div>
         </div>
+      </div>
+
     </div>
-</main>
+  </div>
