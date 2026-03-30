@@ -26,6 +26,40 @@ CREATE TABLE users (
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB;
 
+DELIMITER $$
+
+CREATE TRIGGER users_email_domain_check_before_insert
+BEFORE INSERT ON users
+FOR EACH ROW
+BEGIN
+  IF NEW.email IS NULL OR LOWER(NEW.email) NOT REGEXP '^[^@]+@ynov\\.com$' THEN
+    SIGNAL SQLSTATE '45000'
+      SET MESSAGE_TEXT = 'Seules les adresses @ynov.com sont autorisees';
+  END IF;
+
+  IF NEW.password IS NULL OR NEW.password NOT REGEXP '^\\$2[aby]\\$[0-9]{2}\\$[./A-Za-z0-9]{53}$' THEN
+    SIGNAL SQLSTATE '45000'
+      SET MESSAGE_TEXT = 'Le mot de passe doit etre stocke en hash bcrypt';
+  END IF;
+END$$
+
+CREATE TRIGGER users_email_domain_check_before_update
+BEFORE UPDATE ON users
+FOR EACH ROW
+BEGIN
+  IF NEW.email IS NULL OR LOWER(NEW.email) NOT REGEXP '^[^@]+@ynov\\.com$' THEN
+    SIGNAL SQLSTATE '45000'
+      SET MESSAGE_TEXT = 'Seules les adresses @ynov.com sont autorisees';
+  END IF;
+
+  IF NEW.password IS NULL OR NEW.password NOT REGEXP '^\\$2[aby]\\$[0-9]{2}\\$[./A-Za-z0-9]{53}$' THEN
+    SIGNAL SQLSTATE '45000'
+      SET MESSAGE_TEXT = 'Le mot de passe doit etre stocke en hash bcrypt';
+  END IF;
+END$$
+
+DELIMITER ;
+
 -- POSTS
 CREATE TABLE posts (
   id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
