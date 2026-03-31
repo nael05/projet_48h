@@ -21,11 +21,16 @@ class MessageController {
             $contacts = $this->loadContacts($pdo, $currentUserId);
 
             $requestedUserId = (int) ($_GET['with'] ?? 0);
-            if ($requestedUserId <= 0 && !empty($contacts)) {
-                $requestedUserId = (int) $contacts[0]['id'];
-            }
-
+            
+            // Charger la conversation avec l'utilisateur spécifié, ou le premier contact si aucun n'est spécifié
             if ($requestedUserId > 0) {
+                $selectedUser = $this->loadUserById($pdo, $requestedUserId);
+                if ($selectedUser) {
+                    $conversationMessages = $this->loadConversationMessages($pdo, $currentUserId, $requestedUserId);
+                }
+            } elseif (!empty($contacts)) {
+                // Si aucun utilisateur n'est spécifié, charger la premiere personne de la liste
+                $requestedUserId = (int) $contacts[0]['id'];
                 $selectedUser = $this->loadUserById($pdo, $requestedUserId);
                 if ($selectedUser) {
                     $conversationMessages = $this->loadConversationMessages($pdo, $currentUserId, $requestedUserId);

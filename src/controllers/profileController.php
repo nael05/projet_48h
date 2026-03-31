@@ -195,7 +195,8 @@ class ProfileController {
             // Fallback sur les valeurs de session en cas d'indisponibilite DB.
         }
         
-        $profileUserId = $userId;
+        $profileUserId = $userId;  // ID de l'utilisateur du profil affichage (pour le lien messages)
+        $canMessage = ($userId !== (int) ($_SESSION['user_id'] ?? 0));  // Peut envoyer un message si ce n'est pas son propre profil
         
         require_once __DIR__ . '/../Views/layout/header.php';
         require_once __DIR__ . '/../Views/profile.php';
