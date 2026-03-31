@@ -43,6 +43,17 @@
       <!-- ══ COLONNE GAUCHE ══ -->
       <div style="display:flex;flex-direction:column;gap:20px;">
 
+        <!-- Barre de recherche -->
+        <form action="<?= htmlspecialchars(($basePath ?? '') . '/search/users', ENT_QUOTES, 'UTF-8') ?>" method="GET" style="display:grid;grid-template-columns:1fr auto;gap:8px;">
+          <input 
+            type="text" 
+            name="q" 
+            placeholder="Chercher un utilisateur..." 
+            style="padding:12px 16px;border:1.5px solid #d1d5db;border-radius:8px;font-size:14px;font-family:'Roboto',sans-serif;background:#fff;color:#374151;"
+          />
+          <button type="submit" class="btn-dark" style="padding:12px 24px;white-space:nowrap;">Rechercher</button>
+        </form>
+
         <!-- Publier -->
         <div class="section-header">
           <h2>Publier</h2><span class="sep"></span>

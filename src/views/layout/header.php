@@ -71,48 +71,6 @@ $headerAvatarUrl = $sessionProfilePicture !== '' ? $basePath . $sessionProfilePi
       align-items: center;
     }
 
-    /* Barre de recherche */
-    .header__search {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      flex: 1;
-      max-width: 300px;
-    }
-    .header__search input {
-      width: 100%;
-      padding: 8px 14px;
-      border: 1px solid rgba(255,255,255,0.2);
-      border-radius: 6px;
-      background: rgba(255,255,255,0.1);
-      color: #fff;
-      font-size: 13px;
-      font-family: 'Roboto', sans-serif;
-      transition: all 0.2s;
-    }
-    .header__search input::placeholder {
-      color: rgba(255,255,255,0.5);
-    }
-    .header__search input:focus {
-      outline: none;
-      background: rgba(255,255,255,0.15);
-      border-color: rgba(255,255,255,0.4);
-    }
-    .header__search button {
-      background: rgba(4, 165, 233, 0.8);
-      color: #fff;
-      border: none;
-      border-radius: 6px;
-      padding: 8px 12px;
-      font-size: 13px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: background 0.2s;
-    }
-    .header__search button:hover {
-      background: rgba(4, 165, 233, 1);
-    }
-
     /* Nav secondaire */
     .header__nav {
       display: flex;
@@ -208,18 +166,17 @@ $headerAvatarUrl = $sessionProfilePicture !== '' ? $basePath . $sessionProfilePi
     .btn-outline:hover { border-color: var(--dark); background: var(--gray-100); }
     .skel { background: var(--gray-200); border-radius: 4px; display: block; }
 
+    /* Estilos globales para títulos */
+    h2, h3 {
+      color: #16363c !important;
+    }
+
     /* Media queries pour responsivité */
     @media (max-width: 1024px) {
       .header {
         height: auto;
         flex-wrap: wrap;
         padding: 12px 20px;
-      }
-      .header__search {
-        order: 3;
-        width: 100%;
-        max-width: 100%;
-        margin-top: 12px;
       }
       .header__nav {
         gap: 12px;
@@ -236,9 +193,6 @@ $headerAvatarUrl = $sessionProfilePicture !== '' ? $basePath . $sessionProfilePi
       .header__logo {
         margin-right: 16px;
         font-size: 18px;
-      }
-      .header__search {
-        display: none;
       }
       .header__nav {
         gap: 8px;
@@ -260,18 +214,7 @@ $headerAvatarUrl = $sessionProfilePicture !== '' ? $basePath . $sessionProfilePi
 
   <!-- HEADER UNIQUE -->
   <header class="header">
-    <div class="header__logo">ynovNet</div>
-
-    <!-- Barre de recherche rapide -->
-    <form action="<?= htmlspecialchars($basePath . '/search/users', ENT_QUOTES, 'UTF-8') ?>" method="GET" class="header__search">
-      <input 
-        type="text" 
-        name="q" 
-        placeholder="Rechercher un utilisateur..."
-        autocomplete="off"
-      />
-      <button type="submit">🔍</button>
-    </form>
+    <a href="<?= htmlspecialchars($basePath . '/feed', ENT_QUOTES, 'UTF-8') ?>" class="header__logo" style="text-decoration:none;color:inherit;">ynovNet</a>
 
     <nav class="header__nav">
       <a href="<?= htmlspecialchars($basePath . '/feed', ENT_QUOTES, 'UTF-8') ?>"     class="header__nav-link <?= $activeNav==='feed'     ? 'active':'' ?>">Fil</a>
