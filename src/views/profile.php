@@ -62,7 +62,11 @@
                 <?php endif; ?>
               </div>
               <div style="display:flex;gap:8px;">
-                <button class="btn-dark" style="flex:1;">Envoyer message</button>
+                <?php if (!empty($isOwnProfile)): ?>
+                <button class="btn-dark" style="flex:1; cursor:not-allowed; opacity:0.5;" disabled>Envoyer message</button>
+                <?php else: ?>
+                <a href="<?= htmlspecialchars(($basePath ?? '') . '/messages?with=' . ($profileUserId ?? 0), ENT_QUOTES, 'UTF-8') ?>" class="btn-dark" style="flex:1; text-align:center; text-decoration:none; display:flex; align-items:center; justify-content:center;">Envoyer message</a>
+                <?php endif; ?>
                 <button class="btn-outline" style="padding:8px 12px;">···</button>
               </div>
 
