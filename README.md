@@ -130,4 +130,4 @@ projet_48h/
 
 - Seules les adresses **`@ynov.com`** sont acceptées à l'inscription et en base de données (trigger SQL)
 - Les mots de passe sont hashés en **bcrypt** (vérification par trigger SQL également)
-- Mot de passe minimum : **8 caractères**
+- Mot de passe minimum : **8 caractères** 
