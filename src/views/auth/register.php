@@ -48,6 +48,26 @@ $basePath = ($basePath === '/' || $basePath === '.') ? '' : $basePath;
       display: inline-flex; font-family: 'SFMono-Regular', monospace; font-size: 11px; 
       color: #fff; background: #4b5563; border-radius: 4px; padding: 4px 10px;
     }
+
+    /* Responsive adjustment for auth pages */
+    @media (max-width: 768px) {
+      .auth-container {
+        flex-direction: column;
+        height: auto;
+        min-height: auto;
+        max-width: 440px;
+      }
+      body {
+        height: auto;
+        padding: 40px 20px;
+        overflow: auto;
+      }
+      .auth-container > div:first-child {
+        padding: 40px 20px;
+        border-right: none;
+        border-bottom: 1px solid rgba(0,0,0,0.05);
+      }
+    }
   </style>
 </head>
 <body>

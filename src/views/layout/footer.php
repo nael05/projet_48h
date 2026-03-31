@@ -1,7 +1,7 @@
   </div><!-- /app -->
 
 <?php
-$chatWidgetFile = __DIR__ . '/../../../api_google/chat-widget.html';
+$chatWidgetFile = __DIR__ . '/../../../public/assets/ai/ai-widget.html';
 if (is_file($chatWidgetFile)) {
     include $chatWidgetFile;
 }
