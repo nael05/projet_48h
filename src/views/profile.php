@@ -112,16 +112,6 @@
                   <span style="padding:4px 12px;border-radius:99px;border:1.5px dashed #d1d5db;font-size:12px;color:#9ca3af;background:#fff;cursor:pointer;">+ Ajouter</span>
                 </div>
               </div>
-
-              <!-- RÉSUMÉ IA -->
-              <div style="padding-top:16px;border-top:1px solid rgba(0,0,0,0.1);">
-                <p style="font-family:'Montserrat',sans-serif;font-size:13px;font-weight:700;color:#111827;margin-bottom:10px;">Résumé IA ✨</p>
-                <div style="background:#eff6ff;border:1.5px dashed #93c5fd;border-radius:6px;padding:12px;margin-bottom:10px;">
-                  <div style="height:9px;background:#bfdbfe;border-radius:4px;width:100%;margin-bottom:7px;"></div>
-                  <div style="height:9px;background:#bfdbfe;border-radius:4px;width:75%;"></div>
-                </div>
-                <button class="btn-dark" style="width:100%;margin-bottom:8px;">Générer résumé (IA)</button>
-              </div>
             </div> <!-- FERMETURE COLONNE GAUCHE MANQUANTE -->
 
             <!-- Droite : Publications + Stats -->

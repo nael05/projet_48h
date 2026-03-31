@@ -44,6 +44,7 @@ $router->add('/messages', 'MessageController', 'index');
 $router->add('/messages/send', 'MessageController', 'send');
 $router->add('/messages/share', 'MessageController', 'sharePost');
 $router->add('/messages/poll', 'MessageController', 'poll');
+$router->add('/search/users', 'SearchController', 'users');
 
 $requestUri = $_SERVER['REQUEST_URI'] ?? '/';
 
