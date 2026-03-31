@@ -55,23 +55,12 @@ $basePath = ($basePath === '/' || $basePath === '.') ? '' : $basePath;
     <!-- PANNEAU GAUCHE -->
     <div style="flex:4; background:linear-gradient(145deg, rgba(42,90,87,0.4) 0%, rgba(60,46,112,0.4) 50%, rgba(110,36,63,0.4) 100%); display:flex; flex-direction:column; align-items:center; justify-content:center; padding:40px; color:white; position:relative; border-right: 1px solid rgba(0,0,0,0.05);">
       
-      <div style="display:flex; align-items:center; gap:12px; margin-bottom:24px; position:relative; z-index:10;">
-        <svg viewBox="0 0 100 100" width="46" height="46" style="flex-shrink:0">
-          <defs>
-            <linearGradient id="pg_arr" x1="0%" y1="100%" x2="100%" y2="0%">
-              <stop offset="0%" stop-color="#dce175"/>
-              <stop offset="100%" stop-color="#6bcfa8"/>
-            </linearGradient>
-            <linearGradient id="pg_lin" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stop-color="#d1addc"/>
-              <stop offset="100%" stop-color="#9daee5"/>
-            </linearGradient>
-          </defs>
-          <line x1="28" y1="28" x2="72" y2="72" stroke="url(#pg_lin)" stroke-width="11" stroke-linecap="round"/>
-          <line x1="26" y1="74" x2="72" y2="28" stroke="url(#pg_arr)" stroke-width="11" stroke-linecap="round"/>
-          <polygon points="61,24 76,23 75,38" fill="#6bcfa8"/>
+      <div style="display:flex; align-items:center; gap:0px; margin-bottom:24px; position:relative; z-index:10; font-family:'Montserrat', sans-serif; font-weight:800; font-size:48px; letter-spacing:-.03em; color:#111827;">
+        <svg viewBox="0 0 40 46" width="38" height="44" style="flex-shrink:0; margin-right:4px;">
+          <polygon points="30,0 40,0 14,46 4,46" fill="#d94c63" />
+          <polygon points="0,0 10,0 18.5,15 8.5,15" fill="#36b3a0" />
         </svg>
-        <span style="font-family:'Montserrat', sans-serif; font-weight:800; font-size:42px; letter-spacing:-.03em; color:#111827;">ynovNet</span>
+        <span>novnet</span>
       </div>
 
       <p style="text-align:center; font-size:18px; font-weight:500; line-height:1.4; color:#374151; position:relative; z-index:10;">
